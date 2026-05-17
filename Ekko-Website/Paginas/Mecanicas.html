@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mecanicas - EKKO</title>
+  <link rel="stylesheet" href="../Styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="menu">
+      <a href="../index.html">Inicio</a>
+      <a href="./SuspiciousGeet.html">Suspicious GEET</a>
+      <a href="./Reglamento.html">Reglamento</a>
+      <a href="./Mecanicas.html">Mecanicas</a>
+      <a href="./Bestiario.html">Bestiario</a>
+      <a href="./Eventos.html">Eventos</a>
+      <a href="./Changelog.html">Changelog</a>
+      <a href="./Roadmap.html">Roadmap</a>
+      <a href="./Contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Mecanicas</h1>
+    <p class="subtitle">Habilidades listadas desde la base de datos. Podés filtrar por estado y buscar por nombre.</p>
+
+    <section class="mechanics-toolbar">
+      <input id="mechSearch" class="input" type="search" placeholder="Buscar mecánica..." aria-label="Buscar mecánica" />
+      <select id="mechStatus" class="select" aria-label="Filtrar por estado">
+        <option value="ALL" selected>Todos los estados</option>
+        <option value="OK">OK</option>
+        <option value="REVISION">REVISION</option>
+      </select>
+    </section>
+
+    <section id="mechanicsGrid" class="mechanics-grid" aria-live="polite"></section>
+
+    <template id="mechanicCardTpl">
+      <article class="mechanic-card" data-status="">
+        <div class="mechanic-card__top">
+          <span class="mechanic-id">AM - 000</span>
+          <span class="status status--muted" data-status-text>REVISION</span>
+        </div>
+        <h2 class="mechanic-name"></h2>
+        <p class="mechanic-detail"></p>
+
+        <details class="mechanic-details">
+          <summary>Ver detalle</summary>
+          <div class="mechanic-extra"></div>
+        </details>
+      </article>
+    </template>
+  </main>
+
+  <script>
+    const mechanics = [
+      { id: "AM - 001", name: "Vuela", detail: "Solo puede ser bloqueada por otras creaturas que tengan la habilidad \"Vuela\" o \"Alcance\".", status: "REVISION", extra: "Es similar a la misma habilidad de Magic. Buscarle la vuelta." },
+      { id: "AM - 002", name: "Camina", detail: "Luego de atacar, se puede mover hacia una casilla adyacente.", status: "REVISION", extra: "Solo puede moverse una vez. Una vez que se mueve, no vuelve a atacar." },
+      { id: "AM - 003", name: "Lento", detail: "Solo puede atacar una vez por cada dos turnos.", status: "REVISION", extra: "Revisar en Ekko que no funciona." },
+      { id: "AM - 004", name: "Toxico", detail: "Creatura que daña, creatura que muere.", status: "REVISION", extra: "Revisar si funciona." },
+      { id: "AM - 005", name: "Pesado", detail: "La Creatura a la que ataca no puede atacar el turno siguiente.", status: "REVISION", extra: "Revisar si funciona." },
+      { id: "AM - 006", name: "Resurreccion", detail: "Al morir, vuelve a tu mano.", status: "REVISION", extra: "Revisar si funciona." },
+      { id: "AM - 007", name: "Diagonal", detail: "Ataca en diagonales.", status: "REVISION", extra: "No funciona, revisar." },
+      { id: "AM - 008", name: "Tridente", detail: "Ataca hacia los tres espacios frontales.", status: "REVISION", extra: "No funciona, revisar." },
+      { id: "AM - 009", name: "Colmena", detail: "Gana +1/+1 por cada carta del mismo tipo de tu lado del campo.", status: "REVISION", extra: "No funciona. Revisar" },
+      { id: "AM - 010", name: "Manada", detail: "Al invocarse, busca en el mazo otra carta del mismo tipo y la coloca en tu mano.", status: "REVISION", extra: "No funciona, revisar." },
+      { id: "AM - 011", name: "Proteccion", detail: "Evita el primer daño que vaya a recibir cada turno.", status: "REVISION", extra: "Revisar si funciona." },
+      { id: "AM - 012", name: "Alcance", detail: "Puede bloquear creaturas con la habilidad \"Vuela\".", status: "REVISION", extra: "Buscarle la vuelta" },
+      { id: "AM - 013", name: "Defensor", detail: "El enemigo solo puede atacar a esta creatura mientras esté en el campo.", status: "REVISION", extra: "Renombrar" },
+      { id: "AM - 014", name: "Explosivo", detail: "Al morir, hace daño igual a su poder a todas las creaturas adyacentes.", status: "REVISION", extra: "" },
+      { id: "AM - 015", name: "Etereo", detail: "Luego de atacar vuelve a tu mano.", status: "REVISION", extra: "" },
+      { id: "AM - 016", name: "Traidor", detail: "Luego de atacar, pasa al area de tu enemigo.", status: "REVISION", extra: "" },
+      { id: "AM - 017", name: "Ardiente", detail: "Al finalizar cada turno, realiza 1 de daño a todas las creaturas adyacentes.", status: "REVISION", extra: "No funciona" },
+      { id: "AM - 018", name: "Guardia", detail: "Puede elegir bloquear el ataque dirigido hacia otra creatura.", status: "REVISION", extra: "No funciona" },
+      { id: "AM - 019", name: "Lider", detail: "Aumenta en +2/+0 a las creaturas del mismo tipo de tu lado del campo.", status: "REVISION", extra: "" },
+      { id: "AM - 020", name: "Recolector", detail: "Otorga 1 EKKO al inicio de cada turno.", status: "OK", extra: "" },
+      { id: "AM - 021", name: "Bucear", detail: "Al principio del turno puede moverse a cualquier espacio vacío de tu línea.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 022", name: "Fotosíntesis", detail: "Al final del turno absorbe un EKKO del oponente.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 023", name: "Camuflaje", detail: "La Creatura no puede ser atacada si hay al menos una Creatura a su izquierda o derecha con la misma habilidad.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 024", name: "Embrujar", detail: "Si la Creatura mata a una Creatura, el espacio donde estaba no puede usarse por un turno.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 025", name: "Vampirismo", detail: "Absorbe EKKO del oponente igual al nivel de la Creatura eliminada.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 026", name: "Quimerismo", detail: "La Creatura obtiene una habilidad de la Creatura eliminada.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 027", name: "Devorar", detail: "La Creatura obtiene +1/+1 cada vez que elimina a una Creatura.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 028", name: "Consumir", detail: "La Creatura obtiene +1/+0 cada vez que elimina a una Creatura.", status: "REVISION", extra: "Crear" },
+      { id: "AM - 029", name: "Degustar", detail: "La Creatura obtiene +0+1 cada vez que elimina a una Creatura.", status: "REVISION", extra: "Crear" }
+    ];
+
+    const grid = document.getElementById('mechanicsGrid');
+    const tpl = document.getElementById('mechanicCardTpl');
+    const searchEl = document.getElementById('mechSearch');
+    const statusEl = document.getElementById('mechStatus');
+
+    function statusClass(s) {
+      return s === 'OK' ? 'status--ok' : 'status--review';
+    }
+
+    function render() {
+      const q = (searchEl.value || '').trim().toLowerCase();
+      const st = statusEl.value;
+
+      const filtered = mechanics.filter(m => {
+        const matchQ = !q || [m.name, m.id, m.detail, m.extra].join(' ').toLowerCase().includes(q);
+        const matchS = st === 'ALL' || m.status === st;
+        return matchQ && matchS;
+      });
+
+      grid.innerHTML = '';
+
+      if (!filtered.length) {
+        const p = document.createElement('p');
+        p.className = 'empty-state';
+        p.textContent = 'No hay mecánicas para mostrar con esos filtros.';
+        grid.appendChild(p);
+        return;
+      }
+
+      filtered.forEach(m => {
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.mechanic-id').textContent = m.id;
+        node.querySelector('.mechanic-name').textContent = m.name;
+        node.querySelector('.mechanic-detail').textContent = m.detail;
+        node.querySelector('.mechanic-extra').textContent = m.extra || 'Sin detalle adicional.';
+
+        const statusBadge = node.querySelector('[data-status-text]');
+        statusBadge.textContent = m.status;
+        statusBadge.classList.remove('status--ok', 'status--review', 'status--muted');
+        statusBadge.classList.add(statusClass(m.status));
+
+        grid.appendChild(node);
+      });
+    }
+
+    searchEl.addEventListener('input', render);
+    statusEl.addEventListener('change', render);
+    render();
+  </script>
+
+  <footer>
+    <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
+  </footer>
+</body>
+</html>
+

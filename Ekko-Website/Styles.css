@@ -1,0 +1,398 @@
+/* Fondo blanco, letras negras (sin mayor diseño) */
+
+body {
+  background: #ffffff;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+
+  /* Wallpaper global para todas las páginas */
+  background-image: url('./Media/Wallpaper Fondo Blanco, Azul y Dorado.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
+  /* Footer al final de la página (siempre al bottom) */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+
+.menu {
+
+  background: transparent;
+  color: inherit;
+}
+
+.menu a {
+  color: inherit;
+  text-decoration: underline;
+  margin-right: 12px;
+}
+
+.footer-text {
+  text-align: center;
+}
+
+/* -------------------------
+   Mecanicas (cards + filtros)
+   ------------------------- */
+
+/* -------------------------
+   Bestiario: carta volteable
+   ------------------------- */
+
+.creature-name-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.mechanic-flip {
+  margin-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  padding-top: 10px;
+
+  perspective: 900px;
+  transform-style: preserve-3d;
+
+  transition: transform 400ms ease;
+}
+
+.mechanic-flip__front,
+.mechanic-flip__back {
+  backface-visibility: hidden;
+  position: relative;
+}
+
+.mechanic-flip__back {
+  transform: rotateY(180deg);
+}
+
+.mechanic-flip.is-lore {
+  transform: rotateY(180deg);
+}
+
+.mechanic-flip.is-open {
+  /* semántico; el giro lo maneja is-lore */
+}
+
+.mechanic-lore-toolbar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.flip-back-btn,
+.flip-front-btn {
+  border: 2px solid #000;
+  background: #fff1c9;
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.flip-front-btn {
+  background: #fff;
+}
+
+.subtitle {
+  margin-top: 0;
+  color: #222;
+  max-width: 900px;
+}
+
+.mechanics-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.input,
+.select {
+  border: 2px solid #000;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fff;
+  color: #000;
+}
+
+.mechanics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.mechanic-card {
+  border: 2px solid #000;
+  border-radius: 16px;
+  padding: 14px;
+  background: #fff;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.mechanic-card__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.mechanic-id {
+  font-weight: 700;
+}
+
+.mechanic-name {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.mechanic-detail {
+  margin: 0;
+  color: #111;
+  line-height: 1.35;
+}
+
+.mechanic-details {
+  margin-top: 10px;
+}
+
+.mechanic-details summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.mechanic-extra {
+  margin-top: 8px;
+  color: #111;
+  line-height: 1.35;
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status--muted {
+  background: #f3f3f3;
+  border: 1px solid #000;
+}
+
+.status--ok {
+  background: #d9fdd9;
+  border: 1px solid #000;
+}
+
+.status--review {
+  background: #fff1c9;
+  border: 1px solid #000;
+}
+
+.empty-state {
+  border: 2px dashed #000;
+  border-radius: 16px;
+  padding: 18px;
+  grid-column: 1 / -1;
+}
+
+/* -------------------------
+   Contacto
+   ------------------------- */
+
+.contact-wrap {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 18px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.contact-form {
+  border: 2px solid #000;
+  border-radius: 16px;
+  padding: 16px;
+  background: #fff;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+}
+
+.field {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.label-text {
+  display: inline-block;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: 2px solid #000;
+  background: #fff1c9;
+  color: #000;
+  padding: 10px 16px;
+  font-weight: 900;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #ffe9a8;
+}
+
+.contact-hint {
+  margin: 0;
+  color: #222;
+  font-size: 13px;
+  max-width: 520px;
+}
+
+.contact-result {
+  margin-top: 12px;
+  font-weight: 800;
+}
+
+.contact-result--ok {
+  color: #0a6b0a;
+}
+
+.contact-side {
+  border: 2px solid #000;
+  border-radius: 16px;
+  padding: 16px;
+  background: #fff;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+}
+
+.contact-side ul {
+  padding-left: 18px;
+  margin: 10px 0 0 0;
+}
+
+@media (max-width: 900px) {
+  .contact-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------
+   Roadmap (cuatrimestres)
+   ------------------------- */
+
+.timeline {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+
+.timeline-card {
+  flex: 0 0 320px;
+  border: 2px solid #000;
+  border-radius: 16px;
+  padding: 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.03) 0%, #fff 90%);
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  scroll-snap-align: start;
+}
+
+.timeline-card h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.timeline-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.timeline-card li {
+  margin: 6px 0;
+}
+
+
+/* Tokens (team) */
+.team {
+  padding: 12px 0;
+}
+
+.tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.token {
+  width: 120px;
+  text-align: center;
+}
+
+.token-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 9999px;
+  border: 2px solid #000;
+  margin: 0 auto 8px auto;
+  background: #fff;
+}
+
+/* “Imágenes pendientes”: placeholders (círculos) */
+.token-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.token-name {
+  font-size: 14px;
+}
+
+.token-animal-1 {
+
+  background: repeating-linear-gradient(45deg, #fff 0 6px, #eee 6px 12px);
+}
+.token-animal-2 {
+  background: repeating-linear-gradient(-45deg, #fff 0 6px, #eee 6px 12px);
+}
+.token-animal-3 {
+  background: repeating-linear-gradient(90deg, #fff 0 6px, #eee 6px 12px);
+}
+
+.token-fox {
+  background: radial-gradient(circle at 30% 30%, #fff 0 30%, #ffe0b2 31% 60%, #ffcc80 61% 100%);
+}
+
