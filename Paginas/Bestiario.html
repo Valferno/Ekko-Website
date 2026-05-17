@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bestiario - EKKO</title>
+  <link rel="stylesheet" href="../Styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="menu">
+      <a href="../index.html">Inicio</a>
+      <a href="./SuspiciousGeet.html">Suspicious GEET</a>
+      <a href="./Reglamento.html">Reglamento</a>
+      <a href="./Mecanicas.html">Mecanicas</a>
+      <a href="./Bestiario.html">Bestiario</a>
+      <a href="./Eventos.html">Eventos</a>
+      <a href="./Changelog.html">Changelog</a>
+      <a href="./Roadmap.html">Roadmap</a>
+      <a href="./Contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Bestiario</h1>
+
+    <p class="subtitle">Criaturas listadas desde la base de datos. Podés filtrar por estado y buscar por nombre.</p>
+
+    <section class="mechanics-toolbar">
+      <input id="bestSearch" class="input" type="search" placeholder="Buscar criatura..." aria-label="Buscar criatura" />
+      <select id="bestStatus" class="select" aria-label="Filtrar por estado">
+        <option value="ALL" selected>Todos los estados</option>
+        <option value="OK">OK</option>
+        <option value="REVISION">REVISION</option>
+      </select>
+    </section>
+
+    <section id="bestGrid" class="mechanics-grid" aria-live="polite"></section>
+
+    <template id="bestCardTpl">
+      <article class="mechanic-card" data-status="">
+        <div class="mechanic-card__top">
+          <span class="mechanic-id"></span>
+          <span class="status status--muted" data-status-text></span>
+        </div>
+
+        <h2 class="mechanic-name"></h2>
+
+        <p class="mechanic-detail" data-summary></p>
+
+        <div class="mechanic-flip" aria-label="Carta volteable">
+          <div class="mechanic-flip__front">
+            <button class="flip-front-btn" type="button">Ver lore</button>
+          </div>
+          <div class="mechanic-flip__back">
+            <div class="mechanic-lore-toolbar">
+              <button class="flip-back-btn" type="button">Cerrar</button>
+            </div>
+            <div class="mechanic-extra" data-lore></div>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <div id="bestEmpty" class="empty-state" style="display:none;">No hay criaturas para mostrar con esos filtros.</div>
+  </main>
+
+  <script>
+    const grid = document.getElementById('bestGrid');
+    const tpl = document.getElementById('bestCardTpl');
+    const searchEl = document.getElementById('bestSearch');
+    const statusEl = document.getElementById('bestStatus');
+    const emptyEl = document.getElementById('bestEmpty');
+
+    function statusClass(s) {
+      return s === 'OK' ? 'status--ok' : 'status--review';
+    }
+
+    function parseSemicolonCSV(text) {
+      // Parser simple soportando comillas dobles.
+      const rows = [];
+      let row = [];
+      let field = '';
+      let inQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        const next = text[i + 1];
+
+        if (c === '"') {
+          if (inQuotes && next === '"') {
+            field += '"';
+            i++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+          continue;
+        }
+
+        if (!inQuotes && c === ';') {
+          row.push(field);
+          field = '';
+          continue;
+        }
+
+        if (!inQuotes && (c === '\n' || c === '\r')) {
+          if (c === '\r' && next === '\n') i++;
+          // end of line
+          if (field.length || row.length) {
+            row.push(field);
+            rows.push(row);
+          }
+          row = [];
+          field = '';
+          continue;
+        }
+
+        field += c;
+      }
+
+      if (field.length || row.length) {
+        row.push(field);
+        rows.push(row);
+      }
+
+      // Drop possible empty trailing rows
+      return rows.filter(r => r.some(x => (x ?? '').toString().trim() !== ''));
+    }
+
+    function normalizeHeader(h) {
+      return (h || '').toString().trim();
+    }
+
+    async function loadBestiario() {
+      // Nota: para que fetch funcione desde filesystem sin servidor,
+      // lo ideal es correr con un server local. Si no, igual cargará si
+      // abrís con un servidor.
+      const res = await fetch('../Context/Ekko - Base de datos - Bestiario.csv');
+      const text = await res.text();
+
+      const rows = parseSemicolonCSV(text.replace(/^\uFEFF/, ''));
+      const header = rows[0].map(normalizeHeader);
+      const body = rows.slice(1);
+
+      const idx = (name) => header.findIndex(h => h.toLowerCase() === name.toLowerCase());
+
+      const iCodigo = idx('Codigo');
+      const iNombre = idx('Nombre');
+      const iFamilia = idx('Familia');
+      const iPoder = idx('Poder');
+      const iRes = idx('Resistencia');
+      const iNivel = idx('Nivel');
+      const iHab = idx('Habilidad');
+      const iEstado = idx('ESTADO');
+      const iLore = idx('Lore');
+
+      return body.map(cols => {
+        const get = (i) => (i >= 0 ? (cols[i] ?? '') : '');
+        return {
+          codigo: get(iCodigo),
+          nombre: get(iNombre),
+          familia: get(iFamilia),
+          poder: get(iPoder),
+          resistencia: get(iRes),
+          nivel: get(iNivel),
+          habilidad: get(iHab),
+          estado: get(iEstado),
+          lore: get(iLore),
+          tipo: get(idx('Tipo')),
+        };
+      }).filter(c => c.codigo && c.nombre);
+    }
+
+    function render(list) {
+      grid.innerHTML = '';
+
+      if (!list.length) {
+        emptyEl.style.display = 'block';
+        return;
+      }
+      emptyEl.style.display = 'none';
+
+      list.forEach(c => {
+        const node = tpl.content.cloneNode(true);
+
+        node.querySelector('.mechanic-id').textContent = c.codigo || '';
+        node.querySelector('.mechanic-name').textContent = c.nombre || '';
+        node.querySelector('[data-summary]').textContent = `${c.familia || ''}${c.familia ? ' · ' : ''}${c.tipo || ''} · Poder: ${c.poder || '-'} · Resistencia: ${c.resistencia || '-'} · Nivel: ${c.nivel || '-'}`;
+
+        const badge = node.querySelector('[data-status-text]');
+        badge.textContent = c.estado || 'REVISION';
+        badge.classList.remove('status--ok', 'status--review', 'status--muted');
+        badge.classList.add(statusClass(c.estado || 'REVISION'));
+
+        const loreEl = node.querySelector('[data-lore]');
+        loreEl.textContent = c.lore ? c.lore : 'Sin lore disponible.';
+
+        // Flip behavior
+        const flip = node.querySelector('.mechanic-flip');
+        const frontBtn = node.querySelector('.flip-front-btn');
+        const backBtn = node.querySelector('.flip-back-btn');
+
+        frontBtn.addEventListener('click', () => {
+          flip.classList.add('is-lore');
+        });
+        backBtn.addEventListener('click', () => {
+          flip.classList.remove('is-lore');
+        });
+
+        grid.appendChild(node);
+      });
+    }
+
+    let all = [];
+
+    async function init() {
+      all = await loadBestiario();
+
+      function applyFilters() {
+        const q = (searchEl.value || '').trim().toLowerCase();
+        const st = statusEl.value;
+
+        const filtered = all.filter(c => {
+          const matchQ = !q || [c.codigo, c.nombre, c.familia, c.tipo, c.habilidad, c.lore].join(' ').toLowerCase().includes(q);
+          const matchS = st === 'ALL' || (c.estado || 'REVISION') === st;
+          return matchQ && matchS;
+        });
+
+        render(filtered);
+      }
+
+      searchEl.addEventListener('input', applyFilters);
+      statusEl.addEventListener('change', applyFilters);
+      applyFilters();
+    }
+
+    init().catch(err => {
+      console.error(err);
+      const p = document.createElement('p');
+      p.textContent = 'Error cargando bestiario. Ver consola.';
+      grid.appendChild(p);
+    });
+  </script>
+
+  <footer>
+    <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
+  </footer>
+</body>
+</html>
+

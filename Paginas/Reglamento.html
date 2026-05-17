@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reglamento - EKKO</title>
+  <link rel="stylesheet" href="../Styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="menu">
+      <a href="../index.html">Inicio</a>
+      <a href="./SuspiciousGeet.html">Suspicious GEET</a>
+      <a href="./Reglamento.html">Reglamento</a>
+      <a href="./Mecanicas.html">Mecanicas</a>
+      <a href="./Bestiario.html">Bestiario</a>
+      <a href="./Eventos.html">Eventos</a>
+      <a href="./Changelog.html">Changelog</a>
+      <a href="./Roadmap.html">Roadmap</a>
+      <a href="./Contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Reglamento</h1>
+
+    <p class="subtitle">
+      Documento base del juego (extracto) — EKKO.
+    </p>
+
+    <section class="reglamento" id="reglamento-content" aria-live="polite">
+      <div id="reglamento-loader">Cargando...</div>
+    </section>
+  </main>
+
+  <script>
+    // Nota: el navegador no permite leer DOCX directamente como texto.
+    // Usamos el texto extraído/normalizado que ya está disponible en el build actual.
+    // Si más adelante querés que sea dinámico, se puede hacer conversión a JSON/HTML en build-time.
+    const reglamentoText = `
+Reglamento
+
+El juego es simple, para ganar alcanza con dejar los puntos de vida de tu oponente en 0 pero ojo, que si te quedas sin la posibilidad de robar cartas del mazo también puedes perder.
+
+Pero vamos a lo básico y poco a poco.
+
+1- El Mazo
+
+Cada mazo se compone de 20 cartas de criaturas y 5 cartas de evento. Teniendo en cuenta que puedes tener hasta 4 cartas de criaturas iguales y no se pueden repetir las cartas de evento. Al comenzar la partida se mezclan las cartas de evento de ambos jugadores en una misma pila compartida.
+
+2- Ganar o Perder
+
+La partida se define al ganador de 3 rondas, donde para derrotar a tu oponente hay dos maneras, o queda en 0 (cero) puntos de vida o se queda sin cartas para robar de su mazo (Deckeo) Cada jugador inicia con un total de 20 puntos de vida en cada ronda.
+
+3- Zona de conflicto
+
+La zona de conflicto se compone de un recuadro de 2x5, donde cada jugador dispone de 5 espacios para colocar criaturas con las cuales atacar al oponente.
+
+4- Combate
+
+Al inicio de la ronda, cada jugador roba 5 cartas. Luego, al iniciar cada turno roba una carta más. No hay límite de cartas que se puedan jugar en cada turno.
+
+Cada turno se divide en las siguientes etapas:
+
+1- Robo de cartas: Se roba la carta de cada turno
+
+2- Etapa de Invocación: En esta etapa se juegan las cartas de criatura.
+
+3- Etapa de combate: Cada criatura ataca (si puede).
+
+4- Cálculo de daño: Se calcula el daño realizado al oponente y sus criaturas.
+
+5- Fin de Turno: Se termina el turno e inicia el del oponente.
+
+5- Eventos
+
+Al finalizar ambos turnos, cada jugador roba, en orden, una carta de la pila de cartas de evento y acciona en base a la descripción de la carta. Luego se inicia el próximo turno de tu oponente.
+
+Resumen
+
+Mazos de 20 cartas
+
+20 ptos de vida
+
+Entre turno y turno cada jugador saca una carta de evento.
+
+Mapa de juego de 2 x 5
+
+Máximo 4 copias de una carta en el mazo
+
+Si te quedás sin cartas para robar perdés.
+
+Si te quedas sin puntos de vida pierdes.
+
+Partida a mejor de 3.
+`.trim();
+
+    const target = document.getElementById('reglamento-content');
+    target.innerHTML = '';
+
+    // Render simple conservando saltos de línea.
+    const pre = document.createElement('pre');
+    pre.style.whiteSpace = 'pre-wrap';
+    pre.style.fontFamily = 'inherit';
+    pre.textContent = reglamentoText;
+    target.appendChild(pre);
+  </script>
+
+  <footer>
+    <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
+  </footer>
+</body>
+</html>
+
