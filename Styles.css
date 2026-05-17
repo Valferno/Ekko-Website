@@ -6,7 +6,8 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 
   /* Wallpaper global para todas las páginas */
-  background-image: url('./Media/Wallpaper Fondo Blanco, Azul y Dorado.jpg');
+  background-image: url('./Media/wallpaper01.png');
+
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
