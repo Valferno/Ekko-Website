@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bestiario - EKKO</title>
+  <link rel="stylesheet" href="../Styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="menu">
+      <a href="../index.html">Inicio</a>
+      <a href="./SuspiciousGeet.html">Suspicious GEET</a>
+      <a href="./Reglamento.html">Reglamento</a>
+      <a href="./Mecanicas.html">Mecanicas</a>
+      <a href="./Bestiario.html">Bestiario</a>
+      <a href="./Eventos.html">Eventos</a>
+      <a href="./Changelog.html">Changelog</a>
+      <a href="./Roadmap.html">Roadmap</a>
+      <a href="./Contacto.html">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Bestiario</h1>
+    <p class="subtitle">Listado de criaturas (bestia) desde la base de datos. Podés filtrar por estado y buscar por nombre.</p>
+
+    <section class="mechanics-toolbar">
+      <input id="bestiarySearch" class="input" type="search" placeholder="Buscar criatura..." aria-label="Buscar criatura" />
+      <select id="bestiaryStatus" class="select" aria-label="Filtrar por estado">
+        <option value="ALL" selected>Todos los estados</option>
+        <option value="OK">OK</option>
+        <option value="REVISION">REVISION</option>
+      </select>
+      <select id="bestiaryFamily" class="select" aria-label="Filtrar por familia">
+        <option value="ALL" selected>Todas las familias</option>
+        <option value="Aves">Aves</option>
+        <option value="Insectoide">Insectoide</option>
+        <option value="Cazadores">Cazadores</option>
+        <option value="Monstruos">Monstruos</option>
+        <option value="Acuáticos">Acuáticos</option>
+      </select>
+    </section>
+
+    <section id="bestiaryGrid" class="mechanics-grid" aria-live="polite"></section>
+
+    <template id="creatureCardTpl">
+      <article class="mechanic-card" data-status="">
+        <button type="button" class="creature-name-btn" aria-label="Abrir ficha" data-action="open">
+          <div class="mechanic-card__top">
+            <span class="mechanic-id">AA - 000</span>
+            <span class="status status--muted" data-status-text>REVISION</span>
+          </div>
+          <h2 class="mechanic-name"></h2>
+        </button>
+
+        <div class="mechanic-flip">
+          <div class="mechanic-flip__front">
+            <p class="mechanic-detail"></p>
+          </div>
+          <div class="mechanic-flip__back">
+            <div class="mechanic-lore-toolbar">
+              <button type="button" class="flip-back-btn" data-action="showLore">
+                Lore
+              </button>
+              <button type="button" class="flip-front-btn" data-action="showStats">
+                Datos
+              </button>
+            </div>
+            <div class="mechanic-extra"></div>
+          </div>
+        </div>
+      </article>
+    </template>
+  </main>
+
+  <footer>
+    <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
+  </footer>
+
+  <script>
+    // Nota: la lista anterior estaba incompleta. Se cargan todas las criaturas del CSV.
+    const creatures = [
+      { id: "AA - 001", name: "Cuervo de la Muerte", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 3 • Resistencia 1 • Nivel 2 • Habilidad: Vuela", extra: "El Cuervo de la Muerte es la manifestación más sombría del vacío post-apocalíptico, un ser que no devora la carne, sino que consume la existencia misma. Actuando como un huésped para hongos bioluminiscentes de un tono cian enfermizo, esta criatura bípedo acelera la entropía a su alrededor, convirtiendo lo vivo en ceniza blanca con solo su presencia. Envuelto en un plumaje de obsidiana polvorienta y adornado con un collar de ofrendas macabras, el Corvus Letalis camina entre estatuas de víctimas petrificadas, utilizando su mirada violeta para identificar aquellos cuyo tiempo ha llegado a su fin en el jardín de hierro del multiverso." },
+      { id: "AA - 002", name: "Alas de Ceniza", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Vuela", extra: "El Cuervo Alas de Ceniza es el espíritu errante de las zonas calcinadas, una anomalía biomecánica que existe en un estado de combustión perpetua. Su cuerpo, una estructura frágil de huesos porosos y piel agrietada por el calor, alberga un núcleo de brasas incandescentes que brilla con un naranja agónico a través de su pecho. Sus alas, compuestas por filamentos de carbono que se desintegran en cada aleteo, envuelven a sus presas en una nube asfixiante de hollín y partículas ardientes, convirtiendo el aire en un veneno abrasador. Desde lo alto de rascacielos carbonizados, el Corvus Cinereus observa con ojos de fuego, esperando el momento de descender como un rastro de humo letal sobre aquellos que aún conservan el calor de la vida." },
+      { id: "AA - 003", name: "Cuervo de la Desolación", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Toxico. Vuela", extra: "El Cuervo de la Desolación es el depredador alfa del páramo, una titánica anomalía biomecánica que encarna la voluntad de la tierra por devorar los restos de la civilización. Su biología única le permite asimilar metal oxidado y hormigón en su propia estructura ósea, convirtiendo su cuerpo en un baluarte de plumas de obsidiana y tendones de acero. Como heraldo de la entropía, vigila desde tronos de escombros en los bosques de hierro, utilizando su visión cian radiactiva para localizar presas entre la niebla de ceniza, antes de lanzarse en un ataque bípedo explosivo que tritura hueso y metal por igual bajo su pico de fundición bacteriana." },
+      { id: "AA - 004", name: "Buho Oscuro", familia: "Aves", tipo: "Buho", status: "REVISION", detail: "Poder 1 • Resistencia 2 • Nivel 1 • Habilidad: Pesado. Vuela. Recolector", extra: "Cuando el Búho Segador decide atacar, el aire mismo parece solidificarse. Su habilidad de \"Velo de Ceguera\" alcanza su punto máximo durante el descenso, distorsionando la realidad visual del objetivo. En esta pose, el búho se lanza desde las vigas superiores del sector industrial, con sus alas de fibra de carbono vibrando a una frecuencia que cancela el sonido del viento, convirtiéndose en un proyectil de vacío absoluto." },
+      { id: "AA - 005", name: "Fenix del Mañana", familia: "Aves", tipo: "Fenix", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: Vuela. Resurrección", extra: "El Fénix del Mañana es la cima de la ingeniería energética del pasado. Una entidad biomecánica que no consume carne ni datos, sino que se alimenta de la radiación ambiental. Sus alas de plasma blanco y su cuerpo de oro blanco lo convierten en una deidad tecnológica en un mundo de chatarra. Su ciclo de \"muerte y resurrección\" es en realidad un proceso de autorreparación molecular ultrarrápido que utiliza los materiales del entorno para renacer. Es el \"Faro del Futuro\", un ser que transforma la destrucción en una nueva oportunidad de existencia a través de la fusión nuclear." },
+      { id: "AA - 006", name: "Pico Toxico", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: Toxico. Vuela", extra: "El Cuervo Pico Tóxico es una pesadilla bioquímica surgida de los vertederos industriales del viejo mundo. Actuando como un destilador orgánico de residuos, este depredador bípedo secreta a través de su pico poroso un compuesto cáustico verde neón capaz de perforar las aleaciones más resistentes. Su cuerpo, cubierto por una piel de caucho aceitoso y púas de cristal ponzoñoso, exhala nubes de gas sulfúrico que marchitan la vida a su paso. Desde su trono de barriles oxidados y lodos hirvientes, el Corvus Virosus vigila con sus ojos de color amarillo azufre, esperando el momento de inyectar su cóctel letal en el torrente sanguíneo de cualquier intruso que ose cruzar su territorio contaminado." },
+      { id: "AA - 007", name: "Halcones de Acero", familia: "Aves", tipo: "Halcon", status: "REVISION", detail: "Poder 1 • Resistencia 4 • Nivel 2 • Habilidad: Vuela", extra: "En el campo de batalla, su ataque es un evento silencioso hasta el momento del impacto. Los habitantes de las ciudades en ruinas los llaman \"Los Verdugos de Cromo\", ya que lo último que ve su presa es un destello plateado y una estela de chispas naranjas antes de que la presión del aire sea insoportable." },
+      { id: "AA - 008", name: "Cuervo de Flores", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Diagonal. Vuela", extra: "El Cuervo de Flores es el simbionte supremo de la zona cero, una asombrosa anomalía biomecánica que demuestra que la vida persiste incluso en el corazón de la desolación. Su cuerpo de metal y hueso ha sido asimilado por una red de enredaderas fotosintéticas que se alimentan de la radiación ionizante, transformando un heraldo de la muerte en un jardín viviente. Con alas de filigrana botánica que pulsan con energía cian y violeta, este depredador bípedo hipnotiza a sus presas con polen alucinógeno y una mirada violeta profunda, antes de descender sobre ellas como un torbellino de belleza letal que tritura y absorbe, demostrando que en el multiverso post-apocalíptico, la flor más hermosa es a menudo la más mortal." },
+      { id: "AA - 009", name: "Cuervo Acechador", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: Tridente. Vuela", extra: "El Cuervo Acechador es el asesino silencioso del páramo, una aberración biomecánica que ha sustituido el instinto carroñero por el hambre de energía residual. A diferencia de sus parientes masivos, su cuerpo esquelético está tejido con fibras ópticas y tendones de cable negro, permitiéndole vibrar en frecuencias que lo vuelven virtualmente invisible entre la estática de las zonas en ruinas. En lugar de ojos, una franja de sensores carmesí escanea el calor y los datos de sus presas, mientras que sus alas, similares a redes de cobre deshilachadas, le permiten trepar y acechar desde bosques de antenas y salas de servidores colapsadas, esperando el momento de conectar su pico-sonda cerámico para drenar la vida eléctrica de todo lo que aún late." },
+      { id: "AA - 010", name: "Opium", familia: "Aves", tipo: "Cuervo", status: "REVISION", detail: "Poder 2 • Resistencia 5 • Nivel 3 • Habilidad: Vuela", extra: "El Cuervo Opium es la manifestación física del olvido y la resistencia eterna en el páramo, una titánica anomalía bípedo que existe en un estado de sopor perpetuo. Su cuerpo, una fortaleza de hueso marmóreo y metal oxidado cubierto por un plumaje de vidriería polvorienta, alberga un aura que disuelve la voluntad y la vida de cualquier intruso. Cien veces más denso que un mutante normal, el Corvus Sopora es invulnerable no por fuerza, sino por pura inercia biológica, absorbiendo ataques y tiempo por igual. Desde su trono de escombros en el centro de las ruinas, vigila con ojos vacíos, un monumento viviente que prueba que al final de todas las guerras, solo queda el sueño eterno de la entropía." },
+      { id: "AA - 011", name: "Omega", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Manada", extra: "Sin lore adicional." },
+      { id: "AA - 012", name: "Alfa", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: Lider", extra: "Sin lore adicional." },
+      { id: "AA - 013", name: "Cancerbero", familia: "Cazadores", tipo: "Quimera", status: "REVISION", detail: "Poder 1 • Resistencia 2 • Nivel 2 • Habilidad: Tridente", extra: "Sin lore adicional." },
+      { id: "AA - 014", name: "Acechador", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 3 • Resistencia 1 • Nivel 2 • Habilidad: ", extra: "Sin lore adicional." },
+      { id: "AA - 015", name: "Cazador de Ruinas", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 3 • Resistencia 3 • Nivel 3 • Habilidad: Manada", extra: "Sin lore adicional." },
+      { id: "AA - 016", name: "Beta", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: Manada", extra: "Sin lore adicional." },
+      { id: "AA - 017", name: "Sombra Furtiva", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 2 • Resistencia 1 • Nivel 1 • Habilidad: Etereo", extra: "El Sombra Furtiva (Umbra Instans) es el asesino intangible del páramo, un depredador de anatomía bipedal cuya piel de nanocristales absorbe la luz para una infiltración total. Se desplaza en un acecho casi imperceptible, distorsionando el aire con un desfase térmico que le otorga una apariencia de \"humo mecánico\" mientras emana neblina de aceite negro para borrar su rastro. Su presencia solo es delatada por una fina hendidura de brillo violeta en su rostro justo antes de atacar." },
+      { id: "AA - 018", name: "Rastreador de Cenizas", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 2 • Habilidad: Alcance. Recolector.", extra: "Sin lore adicional." },
+      { id: "AA - 019", name: "Vigilante del Paramo", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 1 • Resistencia 2 • Nivel 1 • Habilidad: Guardia", extra: "El Vigilante del Páramo es la espina dorsal de la red de defensa del ecosistema mecánico. Mientras que los Cazadores son los dientes, el Vigilante es la mirada. Es un depredador paciente que no persigue a su presa, sino que la conduce hacia las emboscadas de la manada mediante pulsos sónicos imperceptibles. Su cuerpo biomecánico está cubierto de sensores de movimiento y antenas filiformes que vibran con el viento, detectando el latido de un corazón orgánico a kilómetros de distancia." },
+      { id: "AA - 020", name: "Chupacabras", familia: "Cazadores", tipo: "Cazador", status: "REVISION", detail: "Poder 5 • Resistencia 1 • Nivel 3 • Habilidad: ", extra: "Sin lore adicional." },
+      { id: "AA - 021", name: "Hormiga Obrera", familia: "Insectoide", tipo: "Hormiga", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Colmena. Recolector.", extra: "Sin lore adicional." },
+      { id: "AA - 022", name: "Araña de Axxia", familia: "Insectoide", tipo: "Araña", status: "REVISION", detail: "Poder 1 • Resistencia 2 • Nivel 2 • Habilidad: Al morir buscas un \"Huevo de Araña\" en tu mazo y lo colocas en el campo;", extra: "No disponible en el CSV (lore sin campo definido)." },
+      { id: "AA - 023", name: "Huevo de Araña", familia: "Insectoide", tipo: "Araña", status: "REVISION", detail: "Poder 0 • Resistencia 1 • Nivel 1 • Habilidad: Al morir buscas un \"Araña de Axxia\" en tu mazo y lo colocas en el campo;", extra: "Sin lore adicional." },
+      { id: "AA - 024", name: "Mosquito Rojo", familia: "Insectoide", tipo: "Mosquito", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Vuela.", extra: "Sin lore adicional." },
+      { id: "AA - 025", name: "Escarabajo de Hierro", familia: "Insectoide", tipo: "Escarabajo", status: "REVISION", detail: "Poder 1 • Resistencia 4 • Nivel 2 • Habilidad: Proteccion", extra: "Sin lore adicional." },
+      { id: "AA - 026", name: "Saltamontes de Acero", familia: "Insectoide", tipo: "Saltamontes", status: "REVISION", detail: "Poder 2 • Resistencia 1 • Nivel 1 • Habilidad: Alcance", extra: "Sin lore adicional." },
+      { id: "AA - 027", name: "Hormiga Gigante", familia: "Insectoide", tipo: "Hormiga", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: ", extra: "Sin lore adicional." },
+      { id: "AA - 028", name: "Hormiga Soldado", familia: "Insectoide", tipo: "Hormiga", status: "REVISION", detail: "Poder 3 • Resistencia 1 • Nivel 2 • Habilidad: Defensor", extra: "Sin lore adicional." },
+      { id: "AA - 029", name: "Hormiga Reina", familia: "Insectoide", tipo: "Hormiga", status: "REVISION", detail: "Poder 1 • Resistencia 4 • Nivel 3 • Habilidad: Otorga +2 de poder y resistencia a las otras hormigas;", extra: "Sin lore adicional." },
+      { id: "AA - 030", name: "Termita Nuclear", familia: "Insectoide", tipo: "Termita", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Explosivo", extra: "Sin lore adicional." },
+      { id: "AA - 031", name: "Gargola del Paramo", familia: "Monstruos", tipo: "Quimera", status: "REVISION", detail: "Poder 1 • Resistencia 3 • Nivel 2 • Habilidad: Vuela", extra: "La Gárgola del Páramo no es simplemente una criatura que parece piedra, es una víctima (o un resultado) de una \"Lluvia de Petrificación\" o \"Plaga de Sílice\" que ocurrió durante el Apocalipsis.\nNo es piedra, es un ciclo: No están petrificadas para siempre. Son criaturas que se petrifican cuando la atmósfera del páramo se vuelve \"tóxica por sílice\" o cuando hay una tormenta de arena silícea. Pasan largos periodos en estado de piedra, y solo se activan cuando la atmósfera \"se limpia\" o cuando un depredador (u humano) se acerca demasiado a sus perchas, rompiendo la tensión superficial del aire petrificante." },
+      { id: "AA - 032", name: "Cangrejo Mutado", familia: "Monstruos", tipo: "Bestia", status: "REVISION", detail: "Poder 1 • Resistencia 3 • Nivel 2 • Habilidad: Camina", extra: "Sin lore adicional." },
+      { id: "AA - 033", name: "Gigante de Barro", familia: "Monstruos", tipo: "Titan", status: "REVISION", detail: "Poder 4 • Resistencia 6 • Nivel 3 • Habilidad: Lento", extra: "Sin lore adicional." },
+      { id: "AA - 034", name: "Sombra Errante", familia: "Monstruos", tipo: "Sombra", status: "REVISION", detail: "Poder 4 • Resistencia 1 • Nivel 2 • Habilidad: Etereo", extra: "Sin lore adicional." },
+      { id: "AA - 035", name: "Espectro", familia: "Monstruos", tipo: "Sombra", status: "REVISION", detail: "Poder 3 • Resistencia 1 • Nivel 1 • Habilidad: Traidor", extra: "Sin lore adicional." },
+      { id: "AA - 036", name: "Bestia de Residuos", familia: "Monstruos", tipo: "Bestia", status: "REVISION", detail: "Poder 1 • Resistencia 1 • Nivel 1 • Habilidad: Toxico", extra: "Sin lore adicional." },
+      { id: "AA - 037", name: "Mutante de Hierro", familia: "Monstruos", tipo: "Titan", status: "REVISION", detail: "Poder 1 • Resistencia 4 • Nivel 2 • Habilidad: Recolector.", extra: "Sin lore adicional." },
+      { id: "AA - 038", name: "Tirano de las Profundidades", familia: "Monstruos", tipo: "Titan", status: "REVISION", detail: "Poder 4 • Resistencia 1 • Nivel 2 • Habilidad: ", extra: "Sin lore adicional." },
+      { id: "AA - 039", name: "Coloso de Fuego", familia: "Monstruos", tipo: "Titan", status: "REVISION", detail: "Poder 2 • Resistencia 2 • Nivel 2 • Habilidad: Ardiente", extra: "Sin lore adicional." },
+      { id: "AA - 040", name: "Quimera de Ruinas", familia: "Monstruos", tipo: "Quimera", status: "REVISION", detail: "Poder 4 • Resistencia 2 • Nivel 3 • Habilidad: Vuela", extra: "Sin lore adicional." },
+      { id: "AA - 041", name: "Pez escurridizo ", familia: "Acuáticos", tipo: "Pez", status: "REVISION", detail: "Poder 1 • Resistencia 2 • Nivel 1 • Habilidad: Bucear", extra: "Sin lore adicional." },
+      { id: "AA - 042", name: "Anguila relámpago ", familia: "Acuáticos", tipo: "Pez", status: "REVISION", detail: "Poder 2 • Resistencia 1 • Nivel 1 • Habilidad: Bucear. Pesado", extra: "Sin lore adicional." },
+      { id: "AA - 043", name: "Ajolote de aguas negras", familia: "Acuáticos", tipo: "Anfibio", status: "REVISION", detail: "Poder 2 • Resistencia 4 • Nivel 2 • Habilidad: Bucear. Defensor", extra: "Sin lore adicional." },
+      { id: "AA - 044", name: "Depredador abisal", familia: "Acuáticos", tipo: "Pez", status: "REVISION", detail: "Poder 5 • Resistencia 3 • Nivel 3 • Habilidad: Bucear. Lento", extra: "Sin lore adicional." }
+    ];
+
+
+    const grid = document.getElementById('bestiaryGrid');
+    const tpl = document.getElementById('creatureCardTpl');
+    const searchEl = document.getElementById('bestiarySearch');
+    const statusEl = document.getElementById('bestiaryStatus');
+    const familyEl = document.getElementById('bestiaryFamily');
+
+
+    function statusClass(s) {
+      return s === 'OK' ? 'status--ok' : 'status--review';
+    }
+
+    function render() {
+      const q = (searchEl.value || '').trim().toLowerCase();
+      const st = statusEl.value;
+
+      const filtered = creatures.filter(c => {
+        const matchQ = !q || [c.name, c.id, c.familia, c.tipo, c.habilidad, c.detail].join(' ').toLowerCase().includes(q);
+        const matchS = st === 'ALL' || c.status === st;
+        const matchF = familyEl && familyEl.value === 'ALL' ? true : (c.familia === familyEl.value);
+        return matchQ && matchS && matchF;
+      });
+
+      grid.innerHTML = '';
+
+      if (!filtered.length) {
+        const p = document.createElement('p');
+        p.className = 'empty-state';
+        p.textContent = 'No hay criaturas para mostrar con esos filtros.';
+        grid.appendChild(p);
+        return;
+      }
+
+      filtered.forEach(c => {
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.mechanic-id').textContent = c.id;
+        node.querySelector('.mechanic-name').textContent = c.name;
+        node.querySelector('.mechanic-detail').textContent = c.detail;
+        node.querySelector('.mechanic-extra').textContent = c.extra || 'Sin lore adicional.';
+
+        const statusBadge = node.querySelector('[data-status-text]');
+        statusBadge.textContent = c.status;
+        statusBadge.classList.remove('status--ok', 'status--review', 'status--muted');
+        statusBadge.classList.add(statusClass(c.status));
+
+        const flipEl = node.querySelector('.mechanic-flip');
+        const openBtn = node.querySelector('[data-action="open"]');
+        const loreBtn = node.querySelector('[data-action="showLore"]');
+        const statsBtn = node.querySelector('[data-action="showStats"]');
+
+        openBtn.addEventListener('click', () => {
+          flipEl.classList.add('is-open');
+          flipEl.classList.remove('is-lore');
+        });
+
+        loreBtn.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          flipEl.classList.add('is-lore');
+          flipEl.classList.add('is-open');
+        });
+
+        statsBtn.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          flipEl.classList.remove('is-lore');
+          flipEl.classList.add('is-open');
+        });
+
+        grid.appendChild(node);
+      });
+    }
+
+    searchEl.addEventListener('input', render);
+    statusEl.addEventListener('change', render);
+    familyEl.addEventListener('change', render);
+    render();
+  </script>
+</body>
+</html>
+

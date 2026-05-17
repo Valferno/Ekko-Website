@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eventos - EKKO</title>
+  <link rel="stylesheet" href="../Styles.css" />
+</head>
+<body>
+  <header>
+    <nav class="menu">
+      <a href="../index.html">Inicio</a>
+      <a href="./SuspiciousGeet.html">Suspicious GEET</a>
+      <a href="./Reglamento.html">Reglamento</a>
+      <a href="./Mecanicas.html">Mecanicas</a>
+      <a href="./Bestiario.html">Bestiario</a>
+      <a href="./Eventos.html">Eventos</a>
+      <a href="./Changelog.html">Changelog</a>
+      <a href="./Roadmap.html">Roadmap</a>
+      <a href="./Contacto.html">Contacto</a>
+
+    </nav>
+  </header>
+
+  <main>
+    <h1>Eventos</h1>
+    <p class="subtitle">Listado de eventos desde la base de datos. Podés filtrar por estado y buscar por nombre.</p>
+
+    <section class="mechanics-toolbar">
+      <input id="eventsSearch" class="input" type="search" placeholder="Buscar evento..." aria-label="Buscar evento" />
+      <select id="eventsStatus" class="select" aria-label="Filtrar por estado">
+        <option value="ALL" selected>Todos los estados</option>
+        <option value="OK">OK</option>
+        <option value="REVISION">REVISION</option>
+      </select>
+    </section>
+
+    <section id="eventsGrid" class="mechanics-grid" aria-live="polite"></section>
+
+    <template id="eventCardTpl">
+      <article class="mechanic-card" data-status="">
+        <div class="mechanic-card__top">
+          <span class="mechanic-id">AE - 000</span>
+          <span class="status status--muted" data-status-text>REVISION</span>
+        </div>
+        <h2 class="mechanic-name"></h2>
+        <p class="mechanic-detail"></p>
+
+        <details class="mechanic-details">
+          <summary>Ver detalle</summary>
+          <div class="mechanic-extra"></div>
+        </details>
+      </article>
+    </template>
+  </main>
+
+  <footer>
+    <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
+  </footer>
+
+  <script>
+    const events = [
+      { id: "AE - 001", name: "Entrenamiento", detail: "Mejoras el poder de una creatura en +2", status: "REVISION", extra: "" },
+      { id: "AE - 002", name: "Retiro Espiritual", detail: "Mejoras la resistencia de una creatura en +3", status: "REVISION", extra: "" },
+      { id: "AE - 003", name: "Sacrificio", detail: "Sacrificas una creatura para darle su poder a otra carta de tu eleccion", status: "REVISION", extra: "" },
+      { id: "AE - 004", name: "Ritual Nebular", detail: "Sacrificas una creatura para darle su resistencia a otra carta de tu eleccion", status: "REVISION", extra: "" },
+      { id: "AE - 005", name: "Fusión", detail: "Sacrificas una creatura para agregar su habilidad a otra creatura", status: "REVISION", extra: "" },
+      { id: "AE - 006", name: "Mutación Alfa", detail: "Sacrificas una creatura. Otra creatura ahora puede volar", status: "REVISION", extra: "" },
+      { id: "AE - 007", name: "Tormenta Helada", detail: "La creatura seleccionada no puede atacar durante dos turnos", status: "REVISION", extra: "" },
+      { id: "AE - 008", name: "Lanza voltaica", detail: "Arrojas la carta hacia el oponente, si impacta, recibe 2 de daño.", status: "REVISION", extra: "" },
+      { id: "AE - 009", name: "Refuerzos", detail: "Buscas una carta a eleccion de tu mazo", status: "REVISION", extra: "" },
+      { id: "AE - 010", name: "Ataque Kamikaze", detail: "Sacrificas una carta de tu mano y tu oponente recibe daño igual a su poder", status: "REVISION", extra: "" },
+      { id: "AE - 011", name: "Lluvia Ácida", detail: "Hace 1 de daño a todas las creaturas del campo.", status: "REVISION", extra: "" },
+      { id: "AE - 012", name: "Lluvia concentrada", detail: "Hace 1 de daño a las creaturas enemigas.", status: "REVISION", extra: "" },
+      { id: "AE - 013", name: "La suerte está echada", detail: "Hace 1d6 de daño a la creatura enemiga.", status: "REVISION", extra: "" },
+      { id: "AE - 014", name: "Lunes", detail: "Sacrificas una creatura para darle + 4 de poder a la creatura seleccionada.", status: "REVISION", extra: "" },
+      { id: "AE - 015", name: "Martes", detail: "Sacrificas una creatura para darle +6 de resistencia a la creatura seleccionada.", status: "REVISION", extra: "" },
+      { id: "AE - 016", name: "Miercoles", detail: "La creatura seleccionada ahora puede es Explosivo", status: "REVISION", extra: "" },
+      { id: "AE - 017", name: "Jueves", detail: "Sacrificas la creatura del contrincante para recuperar vida igual a su resistencia.", status: "REVISION", extra: "" },
+      { id: "AE - 018", name: "Viernes", detail: "Sacrificas la creatura de tu campo para recuperar la vida de tu oponente igual a la resistencia.", status: "REVISION", extra: "" },
+      { id: "AE - 019", name: "Sabado", detail: "Sacrificas la creatura de tu campo. Otra creatura gana la habilidad \"Manada\"", status: "REVISION", extra: "" },
+      { id: "AE - 020", name: "Domingo", detail: "Sacrificas la creatura de tu campo. Otra creatura gana la habilidad \"Colmena\"", status: "REVISION", extra: "" }
+    ];
+
+    const grid = document.getElementById('eventsGrid');
+    const tpl = document.getElementById('eventCardTpl');
+    const searchEl = document.getElementById('eventsSearch');
+    const statusEl = document.getElementById('eventsStatus');
+
+    function statusClass(s) {
+      return s === 'OK' ? 'status--ok' : 'status--review';
+    }
+
+    function render() {
+      const q = (searchEl.value || '').trim().toLowerCase();
+      const st = statusEl.value;
+
+      const filtered = events.filter(e => {
+        const matchQ = !q || [e.name, e.id, e.detail, e.extra].join(' ').toLowerCase().includes(q);
+        const matchS = st === 'ALL' || e.status === st;
+        return matchQ && matchS;
+      });
+
+      grid.innerHTML = '';
+
+      if (!filtered.length) {
+        const p = document.createElement('p');
+        p.className = 'empty-state';
+        p.textContent = 'No hay eventos para mostrar con esos filtros.';
+        grid.appendChild(p);
+        return;
+      }
+
+      filtered.forEach(e => {
+        const node = tpl.content.cloneNode(true);
+        node.querySelector('.mechanic-id').textContent = e.id;
+        node.querySelector('.mechanic-name').textContent = e.name;
+        node.querySelector('.mechanic-detail').textContent = e.detail;
+        node.querySelector('.mechanic-extra').textContent = e.extra || 'Sin detalle adicional.';
+
+        const statusBadge = node.querySelector('[data-status-text]');
+        statusBadge.textContent = e.status;
+        statusBadge.classList.remove('status--ok', 'status--review', 'status--muted');
+        statusBadge.classList.add(statusClass(e.status));
+
+        grid.appendChild(node);
+      });
+    }
+
+    searchEl.addEventListener('input', render);
+    statusEl.addEventListener('change', render);
+    render();
+  </script>
+</body>
+</html>
+
