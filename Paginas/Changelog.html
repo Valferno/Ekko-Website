@@ -67,6 +67,60 @@
     </p>
   </main>
 
+  <script>
+    // Cargamos el changelog desde Context/Changelog.md y lo mostramos en la sección de "Reglamento".
+    async function loadReglamentoChangelog() {
+      const list = document.querySelector('#changelog-reglamento ul.changelog-list');
+      if (!list) return;
+
+      try {
+        const res = await fetch('../Context/Changelog.md');
+        const md = await res.text();
+
+        // Heurística simple: convertimos encabezados (###) y bullets (*) a elementos.
+        const lines = md.split(/\r?\n/);
+        const items = [];
+
+        for (const line of lines) {
+          const l = (line || '').trim();
+          if (!l) continue;
+
+          // bullets
+          if (/^\*\s+/.test(l)) {
+            items.push(l.replace(/^\*\s+/, ''));
+            continue;
+          }
+
+          // sub-secciones (###)
+          const m = l.match(/^###\s+(.*)$/);
+          if (m) {
+            items.push(m[1]);
+            continue;
+          }
+        }
+
+        if (!items.length) {
+          const li = document.createElement('li');
+          li.textContent = 'Changelog vacío o no parseable.';
+          list.appendChild(li);
+          return;
+        }
+
+        for (const it of items) {
+          const li = document.createElement('li');
+          li.textContent = it;
+          list.appendChild(li);
+        }
+      } catch (err) {
+        console.error(err);
+        const li = document.createElement('li');
+        li.textContent = 'Error cargando Changelog.md (ver consola).';
+        list.appendChild(li);
+      }
+    }
+
+    loadReglamentoChangelog();
+  </script>
 
   <footer>
     <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>

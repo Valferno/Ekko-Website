@@ -25,7 +25,7 @@
     <h1>Reglamento</h1>
 
     <p class="subtitle">
-      Documento base del juego (extracto) — EKKO.
+      Documento oficial (extracto/consolidado) — EKKO.
     </p>
 
     <section class="reglamento" id="reglamento-content" aria-live="polite">
@@ -34,75 +34,93 @@
   </main>
 
   <script>
-    // Nota: el navegador no permite leer DOCX directamente como texto.
-    // Usamos el texto extraído/normalizado que ya está disponible en el build actual.
-    // Si más adelante querés que sea dinámico, se puede hacer conversión a JSON/HTML en build-time.
     const reglamentoText = `
-Reglamento
+EKKO - Reglamento (Nuevo)
 
-El juego es simple, para ganar alcanza con dejar los puntos de vida de tu oponente en 0 pero ojo, que si te quedas sin la posibilidad de robar cartas del mazo también puedes perder.
+Este documento es un **consolidado** del reglamento oficial para la versión **0.06.190526**.
 
-Pero vamos a lo básico y poco a poco.
+---
 
-1- El Mazo
+## 1. Conceptos Básicos y Condiciones de Victoria
+El juego es de ritmo rápido y se juega al **mejor de 3 rondas** (el primer jugador en ganar 2 rondas gana la partida).
 
-Cada mazo se compone de 20 cartas de criaturas y 5 cartas de evento. Teniendo en cuenta que puedes tener hasta 4 cartas de criaturas iguales y no se pueden repetir las cartas de evento. Al comenzar la partida se mezclan las cartas de evento de ambos jugadores en una misma pila compartida.
+Cada jugador comienza cada ronda con **20 Puntos de Vida (HP)**. Un jugador es derrotado en una ronda si ocurre cualquiera de las siguientes condiciones:
+* **1.A. Puntos de Vida en 0:** Sus HP se reducen a 0 o menos.
+* **1.B. Deckeo (Sin cartas):** Se queda sin cartas en su mazo de criaturas al momento de verse obligado a robar una carta.
 
-2- Ganar o Perder
+---
 
-La partida se define al ganador de 3 rondas, donde para derrotar a tu oponente hay dos maneras, o queda en 0 (cero) puntos de vida o se queda sin cartas para robar de su mazo (Deckeo) Cada jugador inicia con un total de 20 puntos de vida en cada ronda.
+## 2. Composición de los Mazos y Preparación
+Cada jugador debe presentarse con dos mazos:
+* **2.1. Mazo de Criaturas:** Compuesto por exactamente **20 cartas**. Se permiten hasta **4 copias** de una misma carta de criatura.
+* **2.2. Mazo de Eventos:** Compuesto por exactamente **5 cartas de evento**. No se permiten duplicados (todas las cartas de evento del mazo deben ser únicas).
 
-3- Zona de conflicto
+### Preparación de la Partida:
+Al inicio del juego, las 5 cartas de evento de ambos jugadores se retiran de sus mazos y se mezclan en una única **Pila de Eventos Compartida** (10 cartas en total), la cual se coloca en el centro de la mesa de juego virtual.
 
-La zona de conflicto se compone de un recuadro de 2x5, donde cada jugador dispone de 5 espacios para colocar criaturas con las cuales atacar al oponente.
+---
 
-4- Combate
+## 3. Zona de Conflicto (El Tablero)
+El tablero de juego está optimizado para dispositivos móviles y se compone de una cuadrícula de **2x5**:
+* Cada jugador dispone de una fila con **5 carriles (columnas)** para colocar sus criaturas.
+* Las criaturas de un jugador se enfrentan directamente a las del oponente en el mismo carril.
 
-Al inicio de la ronda, cada jugador roba 5 cartas. Luego, al iniciar cada turno roba una carta más. No hay límite de cartas que se puedan jugar en cada turno.
+---
 
-Cada turno se divide en las siguientes etapas:
+## 4. Anatomía de una Carta de Criatura
+Cada criatura posee una ficha técnica con los siguientes datos:
+* **4.1. Nombre:** Identidad visual y narrativa de la criatura.
+* **4.2. Nivel (Costo de Ekko):** Un valor numérico de **0 a 5**. Determina el costo de recurso necesario para invocarla (las criaturas de Nivel 0 son gratuitas).
+* **4.3. Tipo de Carta:** Define la familia/categoría a la que pertenece la criatura. Esto sirve para sinergias y efectos específicos.
+* **4.4. Puntos de Ataque (ATK):** El daño que la criatura inflige durante la Fase de Combate.
+* **4.5. Puntos de Resistencia (HP):** La cantidad de daño que puede soportar antes de ser destruida.
+* **4.6. Efecto/Texto (Opcional):** Habilidades particulares descritas en la carta.
 
-1- Robo de cartas: Se roba la carta de cada turno
+---
 
-2- Etapa de Invocación: En esta etapa se juegan las cartas de criatura.
+## 5. Reglas de Posicionamiento y Movilidad
+La colocación de las criaturas en el tablero sigue reglas estrictas para promover la planificación táctica:
+* **Sin Reemplazo:** No es posible invocar una criatura en un carril que ya esté ocupado por otra criatura. Para colocar una criatura en un carril ocupado, el espacio debe quedar vacío primero (por ejemplo, tras la destrucción de la criatura anterior).
+* **Sin Movimiento:** Once invocada en un carril específico, la criatura queda fija en esa posición. No es posible moverla a otros carriles, a menos que la propia carta de criatura o un efecto de evento detalle y permita explícitamente el movimiento en su texto.
 
-3- Etapa de combate: Cada criatura ataca (si puede).
+---
 
-4- Cálculo de daño: Se calcula el daño realizado al oponente y sus criaturas.
+## 6. Gestión de Recursos: Sistema "Ekko"
+El juego utiliza un sistema de recursos acumulativo único llamado **Ekko**:
+* Al inicio de cada turno de un jugador, este recibe **+1 recurso Ekko**.
+* **Acumulación:** A diferencia de otros juegos de cartas, el Ekko que no gastes al final de tu turno se conserva y se acumula para turnos futuros. No hay límite en la cantidad de Ekko que puedes almacenar.
+* **Invocación:** Invocar una criatura al tablero consume una cantidad de Ekko de tu reserva acumulada igual a su Nivel.
 
-5- Fin de Turno: Se termina el turno e inicia el del oponente.
+---
 
-5- Eventos
+## 7. Estructura del Turno Dominante
+Durante una ronda, los jugadores se turnan para tener el **Turno Dominante** (ser el jugador activo). El jugador activo pasa por las siguientes fases en orden:
 
-Al finalizar ambos turnos, cada jugador roba, en orden, una carta de la pila de cartas de evento y acciona en base a la descripción de la carta. Luego se inicia el próximo turno de tu oponente.
+* **7.1. Fase de Robo:** El jugador roba 1 carta de criatura de su mazo. *(Al inicio de la ronda, ambos jugadores roban una mano inicial de 5 cartas de criatura antes de que empiece el primer turno).* 
+* **7.2. Fase de Invocación:** El jugador activo puede gastar su Ekko acumulado para invocar criaturas de su mano en sus carriles vacíos.
+* **7.3. Fase de Combate:** Las criaturas del jugador activo atacan en sus carriles correspondientes.
+* **7.4. Cálculo y Persistencia de Daño:** Todo el daño infligido a las criaturas es **persistente**.
+* **7.5. Fin de Turno:** El jugador activo cede el Turno Dominante al oponente.
 
-Resumen
+---
 
-Mazos de 20 cartas
+## 8. Fase de Eventos Cíclicos
+Al finalizar un ciclo completo de turnos (cuando ambos jugadores han completado su Turno Dominante):
+* Robo de Evento, Selección de Objetivos, Orden Rotativo y Reciclaje de Eventos.
 
-20 ptos de vida
+---
 
-Entre turno y turno cada jugador saca una carta de evento.
-
-Mapa de juego de 2 x 5
-
-Máximo 4 copias de una carta en el mazo
-
-Si te quedás sin cartas para robar perdés.
-
-Si te quedas sin puntos de vida pierdes.
-
-Partida a mejor de 3.
-`.trim();
+## 9. Mecánica de Legado (Persistencia Inter-Ronda)
+Los eventos con propiedad de persistencia generan consecuencias durante el resto del match (3 rondas).
+`;
 
     const target = document.getElementById('reglamento-content');
     target.innerHTML = '';
 
-    // Render simple conservando saltos de línea.
     const pre = document.createElement('pre');
     pre.style.whiteSpace = 'pre-wrap';
     pre.style.fontFamily = 'inherit';
-    pre.textContent = reglamentoText;
+    pre.textContent = reglamentoText.trim();
     target.appendChild(pre);
   </script>
 
