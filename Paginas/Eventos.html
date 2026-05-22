@@ -18,6 +18,7 @@
       <a href="./Changelog.html">Changelog</a>
       <a href="./Roadmap.html">Roadmap</a>
       <a href="./Contacto.html">Contacto</a>
+      <a href="./Legales.html">Legales</a>
 
     </nav>
   </header>
@@ -116,30 +117,179 @@
       return rows.filter(r => r.some(x => (x ?? '').toString().trim() !== ''));
     }
 
+    const FALLBACK_EVENTOS = [
+      {
+        "id": "AE - 001",
+        "name": "Entrenamiento",
+        "detail": "Mejoras el poder de una creatura en +2",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 002",
+        "name": "Retiro Espiritual",
+        "detail": "Mejoras la resistencia de una creatura en +3",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 003",
+        "name": "Sacrificio",
+        "detail": "Sacrificas una creatura para darle su poder a otra carta de tu eleccion",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 004",
+        "name": "Ritual Nebular",
+        "detail": "Sacrificas una creatura para darle su resistencia a otra carta de tu eleccion",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 005",
+        "name": "Fusión",
+        "detail": "Sacrificas una creatura para agregar su habilidad a otra creatura",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 006",
+        "name": "Mutación Alfa",
+        "detail": "Sacrificas una creatura. Otra creatura ahora puede volar",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 007",
+        "name": "Tormenta Helada",
+        "detail": "La creatura seleccionada no puede atacar durante dos turnos.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 008",
+        "name": "Lanza voltaica",
+        "detail": "Arrojas la carta hacia el oponente, si impacta, recibe 2 de daño.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 009",
+        "name": "Refuerzos",
+        "detail": "Buscas una carta a eleccion de tu mazo",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 010",
+        "name": "Ataque Kamikaze",
+        "detail": "Sacrificas una carta de tu mano y tu oponente recibe daño igual a su poder.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 011",
+        "name": "Lluvia Acida",
+        "detail": "Hace 1 de daño a todas las creaturas del campo.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 012",
+        "name": "Lluvia concentrada",
+        "detail": "Hace 1 de daño a las creaturas enemigas.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 013",
+        "name": "La suerte está echada",
+        "detail": "Hace 1d6 de daño a la creatura enemiga.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 014",
+        "name": "Lunes",
+        "detail": "Sacrificas una creatura para darle + 4 de poder a la creatura seleccionada.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 015",
+        "name": "Martes",
+        "detail": "Sacrificas una creatura para darle +6 de resistencia a la creatura seleccionada.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 016",
+        "name": "Miercoles",
+        "detail": "La creatura seleccionada ahora puede es Explosivo",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 017",
+        "name": "Jueves",
+        "detail": "Sacrificas la creatura del contrincante para recuperar vida igual a su resistencia.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 018",
+        "name": "Viernes",
+        "detail": "Sacrificas la creatura de tu campo para recuperar la vida de tu oponente igual a la resistencia.",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 019",
+        "name": "Sabado",
+        "detail": "Sacrificas la creatura de tu campo. Otra creatura gana la habilidad \"Manada\"",
+        "status": "REVISION",
+        "extra": ""
+      },
+      {
+        "id": "AE - 020",
+        "name": "Domingo",
+        "detail": "Sacrificas la creatura de tu campo. Otra creatura gana la habilidad \"Colmena\"",
+        "status": "REVISION",
+        "extra": ""
+      }
+    ];
+
     async function loadEventos() {
-      const res = await fetch('../Context/Ekko - Base de datos - Eventos.csv');
-      const text = await res.text();
-      const rows = parseSemicolonCSV(text.replace(/^\uFEFF/, ''));
+      try {
+        const res = await fetch('../Context/Ekko - Base de datos - Eventos.csv');
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const text = await res.text();
+        const rows = parseSemicolonCSV(text.replace(/^\uFEFF/, ''));
 
-      const header = rows[0].map(h => (h || '').toString().trim());
-      const body = rows.slice(1);
+        const header = rows[0].map(h => (h || '').toString().trim());
+        const body = rows.slice(1);
 
-      const iCodigo = header.findIndex(h => h.toLowerCase() === 'codigo');
-      const iNombre = header.findIndex(h => h.toLowerCase() === 'nombre');
-      const iDetalle = header.findIndex(h => h.toLowerCase() === 'detalle');
-      const iEstado = header.findIndex(h => h.toLowerCase() === 'estado');
+        const iCodigo = header.findIndex(h => h.toLowerCase() === 'codigo');
+        const iNombre = header.findIndex(h => h.toLowerCase() === 'nombre');
+        const iDetalle = header.findIndex(h => h.toLowerCase() === 'detalle');
+        const iEstado = header.findIndex(h => h.toLowerCase() === 'estado');
 
-      return body.map(cols => {
-        const get = (i) => (i >= 0 ? (cols[i] ?? '') : '');
-        const id = get(iCodigo);
-        return {
-          id,
-          name: get(iNombre),
-          detail: get(iDetalle),
-          status: get(iEstado),
-          extra: ''
-        };
-      }).filter(e => e.id && e.name);
+        return body.map(cols => {
+          const get = (i) => (i >= 0 ? (cols[i] ?? '') : '');
+          const id = get(iCodigo);
+          return {
+            id,
+            name: get(iNombre),
+            detail: get(iDetalle),
+            status: get(iEstado),
+            extra: ''
+          };
+        }).filter(e => e.id && e.name);
+      } catch (err) {
+        console.warn('No se pudo cargar el CSV de eventos dinámicamente (por ejemplo, por restricciones de CORS de tu navegador al abrir el archivo localmente con double click). Cargando los datos de respaldo locales...', err);
+        return FALLBACK_EVENTOS;
+      }
     }
 
     let events = [];

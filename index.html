@@ -1,14 +1,1128 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="./Styles.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EKKO - Inicio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EKKO - El Juego de Cartas del Vacío</title>
+  <link rel="stylesheet" href="./Styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Premium Home Styling - Cohesive with Comic & Game Aesthetics */
+    :root {
+      --primary-color: #ffb74d;
+      --secondary-color: #ff8a65;
+      --accent-color: #8a2be2;
+      --dark-color: #0b0b14;
+      --light-color: #ffffff;
+      --grey-color: #f3f3f7;
+    }
+
+    body {
+      font-family: 'Outfit', 'Space Grotesk', sans-serif;
+    }
+
+    main {
+      border: 3px solid #000000 !important;
+      box-shadow: 6px 6px 0px #000000;
+      background: rgba(255, 255, 255, 0.96) !important;
+      padding: 30px !important;
+    }
+
+    /* Hero Section */
+    .hero-container {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 50px;
+      border-bottom: 3px dashed #000;
+      padding-bottom: 40px;
+    }
+
+    .hero-text {
+      text-align: left;
+    }
+
+    .game-logo-wrapper {
+      margin-bottom: 12px;
+    }
+
+    .game-logo {
+      font-size: 5.5rem;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #000000;
+      line-height: 0.85;
+      text-transform: uppercase;
+      text-shadow: 3px 3px 0px var(--primary-color), 6px 6px 0px #000000;
+      display: inline-block;
+      transform: skewX(-5deg);
+    }
+
+    .game-badge {
+      display: inline-block;
+      background: #000;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 800;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      box-shadow: 2px 2px 0px var(--secondary-color);
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: #222222;
+      margin-bottom: 24px;
+      max-width: 540px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 900;
+      border: 3px solid #000000;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px #000000;
+      transition: all 0.15s ease-in-out;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .cta-btn--primary {
+      background: var(--primary-color);
+      color: #000000;
+    }
+
+    .cta-btn--primary:hover {
+      background: #ffa726;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #000000;
+    }
+
+    .cta-btn--secondary {
+      background: var(--light-color);
+      color: #000000;
+    }
+
+    .cta-btn--secondary:hover {
+      background: var(--grey-color);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px #000000;
+    }
+
+    /* Mockup Game Board Card */
+    .board-mockup {
+      border: 8px solid #2d2925;
+      border-radius: 28px;
+      background: #0f0e0d;
+      box-shadow: 6px 6px 0px #000000;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 4.4;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .board-mockup::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, rgba(138, 43, 226, 0.15) 0%, transparent 75%);
+      pointer-events: none;
+    }
+
+    /* UI Header in Mockup */
+    .mockup-ui-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.15);
+      padding-bottom: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .hp-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .hp-fill {
+      width: 80px;
+      height: 8px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #444;
+    }
+
+    .hp-fill--player { background: #2ecc71; width: 100%; height: 100%; }
+    .hp-fill--foe { background: #e74c3c; width: 70%; height: 100%; }
+
+    /* Arena Grid */
+    .mockup-arena {
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+      gap: 8px;
+      margin: 10px 0;
+      flex-grow: 1;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .arena-row {
+      display: grid;
+      grid-template-columns: repeat(5, 52px);
+      gap: 6px;
+    }
+
+    .arena-slot {
+      border: 2px dashed rgba(255, 255, 255, 0.25);
+      border-radius: 8px;
+      aspect-ratio: 1 / 1.35;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .arena-slot--active-player {
+      border: 2px solid var(--primary-color);
+      background: rgba(255, 183, 77, 0.1);
+      box-shadow: 0 0 10px rgba(255, 183, 77, 0.2);
+    }
+
+    .arena-slot--active-foe {
+      border: 2px solid #e74c3c;
+      background: rgba(231, 76, 60, 0.1);
+    }
+
+    /* Miniature Cards */
+    .mini-card {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border: 1.5px solid #000;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 3px;
+      box-sizing: border-box;
+      font-size: 0.5rem;
+      color: #000;
+      font-weight: 700;
+    }
+
+    .mini-card--foe {
+      background: #ffcdd2;
+    }
+
+    .mini-card__art {
+      background: #ddd;
+      flex-grow: 1;
+      border-radius: 3px;
+      margin: 2px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+    }
+
+    .mini-card__art--shadow { background: linear-gradient(135deg, #7b1fa2, #311b92); color: #fff; }
+    .mini-card__art--phoenix { background: linear-gradient(135deg, #ff8f00, #d84315); color: #fff; }
+
+    .mini-card__stats {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.45rem;
+      background: #000;
+      color: #fff;
+      border-radius: 2px;
+      padding: 0px 2px;
+    }
+
+    /* Center line */
+    .arena-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      position: relative;
+    }
+
+    .combat-vector {
+      position: absolute;
+      top: -12px;
+      left: 114px;
+      width: 2px;
+      height: 28px;
+      background: #ff5722;
+      box-shadow: 0 0 8px #ff5722;
+      animation: pulseBeam 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseBeam {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* UI Footer in Mockup */
+    .mockup-ui-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 2px dashed rgba(255, 255, 255, 0.15);
+      padding-top: 8px;
+      font-size: 0.75rem;
+      color: #fff;
+    }
+
+    .resource-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .resource-crystal {
+      width: 12px;
+      height: 12px;
+      background: #00e5ff;
+      transform: rotate(45deg);
+      box-shadow: 0 0 6px #00e5ff;
+      display: inline-block;
+    }
+
+    /* Key Pillars Section */
+    .pillars-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 50px;
+    }
+
+    .pillar-card {
+      border: 3px solid #000000;
+      border-radius: 16px;
+      padding: 24px;
+      background: var(--light-color);
+      box-shadow: 4px 4px 0px #000000;
+      transition: all 0.2s ease-in-out;
+      text-align: left;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 7px 7px 0px #000000;
+    }
+
+    .pillar-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .pillar-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      border-bottom: 2px solid #000;
+      padding-bottom: 6px;
+    }
+
+    .pillar-desc {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #333333;
+      margin: 0;
+    }
+
+    /* Showcase Creatures Section */
+    .showcase-section {
+      background: #fff9e6;
+      border: 3px solid #000;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 4px 4px 0px #000000;
+      margin-bottom: 50px;
+    }
+
+    .showcase-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .showcase-subtitle {
+      font-size: 1rem;
+      color: #555555;
+      text-align: center;
+      margin-bottom: 30px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cards-flex {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      perspective: 1000px; /* For 3D Tilt Effect */
+    }
+
+    /* Real TCG Card Layout */
+    .tcg-card {
+      width: 250px;
+      height: 360px;
+      border: 3px solid #000;
+      border-radius: 18px;
+      background: #ffffff;
+      padding: 12px;
+      box-sizing: border-box;
+      box-shadow: 4px 4px 0px #000000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tcg-card:hover {
+      transform: scale(1.03) rotateY(5deg) rotateX(5deg);
+      box-shadow: 8px 8px 0px #000000;
+    }
+
+    .tcg-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2.5px solid #000;
+      padding-bottom: 6px;
+    }
+
+    .tcg-name {
+      font-weight: 800;
+      font-size: 1rem;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .tcg-level {
+      background: #000;
+      color: #fff;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .tcg-art {
+      border: 2.5px solid #000;
+      border-radius: 10px;
+      height: 145px;
+      margin: 8px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tcg-art--death { background: linear-gradient(135deg, #111 20%, #4a148c 80%); }
+    .tcg-art--phoenix { background: linear-gradient(135deg, #e65100 20%, #ffb300 80%); }
+    .tcg-art--owl { background: linear-gradient(135deg, #0d47a1 20%, #00acc1 80%); }
+
+    /* CSS Geometric Creatures */
+    .art-glyph {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px; height: 50px;
+      border: 3.5px solid #fff;
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+    }
+
+    .art-glyph--death { border-radius: 50%; background: #000; transform: translate(-50%, -50%) rotate(45deg); border-left-color: #00e5ff; }
+    .art-glyph--phoenix { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 43px solid #ff3d00; background: transparent; box-shadow: none; }
+    .art-glyph--owl { border-radius: 8px; background: #fff; transform: translate(-50%, -50%) rotate(22deg); }
+
+    .tcg-type {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .tcg-ability {
+      border: 2px solid #000;
+      border-radius: 8px;
+      background: #fafafa;
+      padding: 6px 10px;
+      font-size: 0.75rem;
+      line-height: 1.3;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      color: #111;
+    }
+
+    .tcg-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      border-top: 2px solid #000;
+      padding-top: 6px;
+    }
+
+    .tcg-stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      border: 2px solid #000;
+      border-radius: 6px;
+      padding: 2px 8px;
+    }
+
+    .tcg-stat-badge--atk { background: #ffebee; color: #c62828; }
+    .tcg-stat-badge--hp { background: #e8f5e9; color: #2e7d32; }
+
+    /* Interactive Combat Simulator Section */
+    .sim-section {
+      border: 3px solid #000;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 4px 4px 0px #000000;
+      background: #ffffff;
+      margin-bottom: 30px;
+    }
+
+    .sim-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .sim-desc {
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    /* High Fidelity Mobile TCG Frame Cloned from Screenshot */
+    .sim-phone-wrapper {
+      max-width: 412px;
+      margin: 30px auto;
+      background: #0f0e0d;
+      border: 12px solid #2d2925;
+      border-radius: 40px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 3px #1c1815;
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Debug Angled Ribbon */
+    .debug-ribbon {
+      position: absolute;
+      top: 13px;
+      right: -26px;
+      background: #c62828;
+      color: #fff;
+      font-size: 8px;
+      font-weight: 900;
+      padding: 2px 28px;
+      transform: rotate(45deg);
+      z-index: 10;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      font-family: sans-serif;
+    }
+
+    /* Phone Status Bar */
+    .phone-status-bar {
+      background: #151311;
+      height: 24px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #8c8276;
+      font-size: 11px;
+      font-family: monospace;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px solid #1c1815;
+    }
+
+    /* Shared Event Cards Backs */
+    .shared-events {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin: 10px 0 6px 0;
+    }
+
+    .event-card-back {
+      width: 32px;
+      height: 20px;
+      border: 1px dashed #7a7065;
+      background: rgba(255, 255, 255, 0.02);
+      color: #ff8f00;
+      font-size: 8px;
+      font-family: monospace;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+    }
+
+    /* Banners & Turn Texts */
+    .banner-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      color: #8c8276;
+      font-size: 0.65rem;
+      font-family: 'Space Grotesk', monospace;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .turn-text {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #ffab40;
+      font-weight: 700;
+    }
+
+    .turn-text--inactive {
+      color: #8c8276 !important;
+    }
+
+    .turn-dot {
+      width: 6px;
+      height: 6px;
+      background: #4caf50;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #4caf50;
+    }
+
+    .turn-dot--inactive {
+      background: transparent !important;
+      border: 1px solid #8c8276;
+      box-shadow: none !important;
+    }
+
+    .turn-dot-orange {
+      width: 6px;
+      height: 6px;
+      background: #ff7043;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #ff7043;
+    }
+
+    .energy-badge {
+      background: #1c1815;
+      border: 1.5px solid #ffab40;
+      border-radius: 4px;
+      padding: 2px 8px;
+      color: #ffab40;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Segmented HP Bar */
+    .hp-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      margin-bottom: 8px;
+      color: #fff;
+      font-size: 0.75rem;
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 700;
+    }
+
+    .hp-segmented-bar {
+      display: flex;
+      gap: 4px;
+      flex-grow: 1;
+      height: 12px;
+      background: #151311;
+      border: 1.5px solid #2d2925;
+      border-radius: 3px;
+      padding: 1px;
+    }
+
+    .hp-segment {
+      flex: 1;
+      background: #7cb342;
+      border-radius: 1px;
+      transition: background 0.25s ease;
+    }
+
+    .hp-segment.is-damaged {
+      background: #2d2925 !important;
+    }
+
+    /* Arena Grid: Grid row & Slots */
+    .arena-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      margin: 12px 0;
+    }
+
+    .arena-grid-lanes {
+      display: grid;
+      grid-template-rows: 1fr auto 1fr;
+      gap: 8px;
+      flex-grow: 1;
+    }
+
+    .arena-lane-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 5px;
+    }
+
+    .arena-lane-slot {
+      border: 1.5px dashed #3a352e;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      aspect-ratio: 1 / 1.35;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .arena-lane-slot.player-highlight {
+      border-color: #cddc39;
+      background: rgba(205, 220, 57, 0.08);
+      animation: slotFlash 1.5s infinite alternate;
+    }
+
+    @keyframes slotFlash {
+      0% { border-color: #8c8276; }
+      100% { border-color: #cddc39; box-shadow: 0 0 6px rgba(205, 220, 57, 0.3); }
+    }
+
+    /* Sidebar slots (Mazo & Descarte) */
+    .sidebar-slot {
+      width: 34px;
+      height: 48px;
+      border: 1.5px solid #2d2925;
+      background: #1c1815;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.5rem;
+      color: #8c8276;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      position: relative;
+    }
+
+    .sidebar-slot--deck {
+      border-color: #ff8f00;
+    }
+
+    .sidebar-slot--deck::before {
+      content: var(--deck-count, "15");
+      position: absolute;
+      top: -7px;
+      left: -7px;
+      background: #ff5722;
+      color: #fff;
+      font-size: 0.5rem;
+      font-weight: 900;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .sidebar-slot--discard::before {
+      content: var(--discard-count, "0");
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      background: #555;
+      color: #fff;
+      font-size: 0.5rem;
+      font-weight: 900;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .deck-logo {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: #ffab40;
+    }
+
+    .discard-logo {
+      width: 8px;
+      height: 8px;
+      background: #7cb342;
+      transform: rotate(45deg);
+      box-shadow: 0 0 4px #7cb342;
+    }
+
+    /* high fidelity actual tcg card structure */
+    .real-tcg-card {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2d231b 0%, #0d0c0a 100%);
+      border: 1px solid #ffab40;
+      border-radius: 6px;
+      padding: 3px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      transition: all 0.2s ease;
+    }
+
+    .real-tcg-card.selected-outline {
+      border: 1.5px solid #cddc39 !important; /* Green highlight around fanned card selected */
+      box-shadow: 0 0 10px #cddc39, 0 2px 5px rgba(0,0,0,0.6);
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.35rem;
+      color: #fff;
+      font-weight: 800;
+      font-family: 'Space Grotesk', monospace;
+    }
+
+    .card-name-title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 32px;
+      text-transform: uppercase;
+      letter-spacing: -0.2px;
+    }
+
+    .card-level-tag {
+      background: #ffab40;
+      color: #000;
+      font-size: 0.35rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+    }
+
+    .card-body-area {
+      border: 1px solid #1c1815;
+      background: radial-gradient(circle, #3e3227 0%, #111116 100%);
+      border-radius: 4px;
+      flex-grow: 1;
+      margin: 2px 0;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-core-letters {
+      font-size: 0.8rem;
+      font-weight: 900;
+      color: #ff7043;
+      opacity: 0.25;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+    .card-ability-badge {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      background: rgba(76, 175, 80, 0.15);
+      color: #81c784;
+      border: 0.5px solid #81c784;
+      font-size: 0.28rem;
+      padding: 0px 2px;
+      border-radius: 1px;
+      font-weight: 900;
+      text-transform: uppercase;
+      transform: scale(0.9);
+      transform-origin: top left;
+    }
+
+    .card-type-pill {
+      position: absolute;
+      bottom: 2px;
+      left: 2px;
+      background: #d84315;
+      color: #fff;
+      font-size: 0.24rem;
+      padding: 0px 2px;
+      border-radius: 1px;
+      font-weight: 700;
+      text-transform: uppercase;
+      transform: scale(0.9);
+      transform-origin: bottom left;
+    }
+
+    .card-stats-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #1c1815;
+      padding-top: 1px;
+      font-size: 0.38rem;
+      font-weight: 900;
+      background: #0d0c0a;
+      border-radius: 2px;
+      font-family: 'Space Grotesk', monospace;
+    }
+
+    .stat-val--atk { color: #ff7043; }
+    .stat-val--res { color: #fff; }
+    .stat-divider { color: #3a352e; }
+
+    /* Fanned Cards Hand at the bottom */
+    .player-hand-container {
+      height: 105px;
+      position: relative;
+      margin: 8px 12px 0 12px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding-bottom: 6px;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .hand-card-wrapper {
+      position: absolute;
+      width: 60px;
+      height: 86px;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+      cursor: pointer;
+      transform-origin: bottom center;
+    }
+
+    /* Fan Rotations of hand cards */
+    .hand-card-wrapper:nth-child(1) { transform: rotate(-12deg) translateX(-64px) translateY(5px); z-index: 1; }
+    .hand-card-wrapper:nth-child(2) { transform: rotate(-6deg) translateX(-32px) translateY(1.5px); z-index: 2; }
+    .hand-card-wrapper:nth-child(3) { transform: rotate(0deg) translateX(0) translateY(0); z-index: 3; }
+    .hand-card-wrapper:nth-child(4) { transform: rotate(6deg) translateX(32px) translateY(1.5px); z-index: 4; }
+    .hand-card-wrapper:nth-child(5) { transform: rotate(12deg) translateX(64px) translateY(5px); z-index: 5; }
+
+    .hand-card-wrapper .real-tcg-card {
+      transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.15), box-shadow 0.22s ease;
+    }
+
+    .hand-card-wrapper:hover {
+      z-index: 12 !important;
+    }
+
+    .hand-card-wrapper:hover::after {
+      content: "";
+      position: absolute;
+      top: -45px;
+      bottom: -45px;
+      left: -20px;
+      right: -20px;
+      background: transparent;
+      z-index: -1;
+      pointer-events: auto;
+    }
+
+    .hand-card-wrapper:hover .real-tcg-card {
+      transform: translateY(-25px) scale(1.25) !important;
+      box-shadow: 0 8px 20px rgba(255,183,77,0.4) !important;
+      filter: drop-shadow(0 5px 12px rgba(255,183,77,0.3));
+    }
+
+    /* Phone Controls & Action buttons */
+    .action-btn-draw {
+      width: calc(100% - 24px);
+      margin: 10px 12px 6px 12px;
+      background: #1c1815;
+      border: 1.5px solid #ffab40;
+      color: #ffab40;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 7px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      font-family: 'Space Grotesk', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.15s ease;
+    }
+
+    .action-btn-draw:hover {
+      background: #ffab40;
+      color: #000;
+    }
+
+    .action-btn-primary {
+      width: calc(100% - 24px);
+      margin: 0 12px 14px 12px;
+      background: #ff5722;
+      border: 1px solid #ff7043;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 11px 0;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+      text-transform: uppercase;
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn-primary:hover {
+      background: #f4511e;
+      transform: translateY(-1px);
+    }
+
+    .action-btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    /* Combat beam animation */
+    .arena-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      position: relative;
+    }
+
+    .attack-arrow {
+      position: absolute;
+      width: 3px;
+      height: 38px;
+      background: linear-gradient(to top, #ffab40, #ff5722);
+      top: -18px;
+      left: 50%;
+      opacity: 0;
+      box-shadow: 0 0 10px #ff5722, 0 0 20px #ff7043;
+      transition: opacity 0.1s ease;
+    }
+
+    .attack-arrow.is-attacking {
+      opacity: 1;
+      animation: beamShoot 0.5s forwards cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .arena-lane-slot.is-hit {
+      animation: laneHit 0.25s 0.2s forwards ease-in-out;
+    }
+
+    @keyframes beamShoot {
+      0% { transform: scaleY(0.1) translateY(20px); opacity: 0.5; }
+      50% { transform: scaleY(1.2) translateY(-10px); opacity: 1; }
+      100% { transform: scaleY(0.1) translateY(-40px); opacity: 0; }
+    }
+
+    @keyframes laneHit {
+      0%, 100% { border-color: #3a352e; background: rgba(0,0,0,0.2); }
+      50% { border-color: #fff; background: rgba(244, 81, 30, 0.4); box-shadow: 0 0 15px #ff5722; }
+    }
+
+    /* Responsive */
+    @media (max-width: 850px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+      }
+      .game-logo {
+        font-size: 4rem;
+      }
+      .board-mockup {
+        max-width: 440px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+  </style>
 </head>
 <body>
 
-<header>
+  <header>
     <nav class="menu">
       <a href="./index.html">Inicio</a>
       <a href="./Paginas/SuspiciousGeet.html">Suspicious GEET</a>
@@ -19,18 +1133,1105 @@
       <a href="./Paginas/Changelog.html">Changelog</a>
       <a href="./Paginas/Roadmap.html">Roadmap</a>
       <a href="./Paginas/Contacto.html">Contacto</a>
+      <a href="./Paginas/Legales.html">Legales</a>
     </nav>
   </header>
  
-<main>
-    <h1>Inicio</h1>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-container" aria-label="Introducción a EKKO">
+      <div class="hero-text">
+        <div class="game-logo-wrapper">
+          <h1 class="game-logo">EKKO</h1>
+        </div>
+        <span class="game-badge">Juego de Cartas del Vacío</span>
+        <p class="hero-desc">
+          Un juego táctico de cartas coleccionables donde tu estrategia trasciende las rondas. Gestiona tu reserva de <strong>recursos acumulables</strong>, disputa un tablero dinámico de 5 carriles y aprovecha la persistencia del <strong>Legado</strong> para dominar los ciclos del páramo.
+        </p>
+        <div class="hero-ctas">
+          <a href="./Paginas/Reglamento.html" class="cta-btn cta-btn--primary">Leer Reglamento</a>
+          <a href="./Paginas/Bestiario.html" class="cta-btn cta-btn--secondary">Ver Bestiario</a>
+        </div>
+      </div>
+
+      <!-- Interactive UI Mockup Right -->
+      <div class="board-mockup" aria-hidden="true">
+        <!-- Angled Debug Banner -->
+        <div class="debug-ribbon" style="top: 10px; right: -22px; font-size: 7px; padding: 2px 20px;">DEBUG</div>
+
+        <!-- Superior Phone Status Bar -->
+        <div class="phone-status-bar" style="height: 18px; padding: 0 12px; font-size: 8px; border-bottom-width: 1px;">
+          <span>20:07</span>
+          <span>📶 🛜 71% 🔋</span>
+        </div>
+
+        <!-- Shared Events Deck (top center) -->
+        <div class="shared-events" style="margin: 6px 0 4px 0; gap: 3px;">
+          <div class="event-card-back" style="width: 24px; height: 15px; font-size: 6px;">E</div>
+          <div class="event-card-back" style="width: 24px; height: 15px; font-size: 6px;">E</div>
+          <div class="event-card-back" style="width: 24px; height: 15px; font-size: 6px;">E</div>
+          <div class="event-card-back" style="width: 24px; height: 15px; font-size: 6px;">E</div>
+          <div class="event-card-back" style="width: 24px; height: 15px; font-size: 6px;">E</div>
+        </div>
+
+        <!-- Opponent Turn Indicator & Energy -->
+        <div class="banner-row" style="padding: 0 12px; font-size: 0.5rem; margin-bottom: 2px;">
+          <span class="turn-text turn-text--inactive">
+            <span class="turn-dot turn-dot--inactive" style="width: 4px; height: 4px;"></span>
+            <span>Turno del Oponente</span>
+          </span>
+          <span class="energy-badge" style="padding: 1px 5px; font-size: 0.5rem;">⚡ 0</span>
+        </div>
+
+        <!-- Opponent Segmented HP Bar -->
+        <div class="hp-row" style="padding: 0 12px; font-size: 0.55rem; margin-bottom: 4px;">
+          <span>HP 14</span>
+          <div class="hp-segmented-bar" style="height: 8px; border-width: 1px;">
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment is-damaged"></div>
+            <div class="hp-segment is-damaged"></div>
+          </div>
+        </div>
+
+        <!-- Active Battle Arena Grid -->
+        <div class="arena-wrapper" style="padding: 0 12px; margin: 4px 0; gap: 6px;">
+          <!-- Deck Pile (Left Sidebar) -->
+          <div class="sidebar-slot sidebar-slot--deck" style="width: 24px; height: 35px; border-radius: 4px; font-size: 0.35rem; --deck-count: '15';">
+            <span class="deck-logo" style="font-size: 0.5rem;">E</span>
+            <span style="font-size: 0.2rem; scale: 0.8; margin-top: 1px;">MAZO</span>
+          </div>
+
+          <!-- Board lanes -->
+          <div class="arena-grid-lanes" style="gap: 4px;">
+            <!-- Foe Lanes -->
+            <div class="arena-lane-row" style="gap: 3px;">
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+              <div class="arena-lane-slot" style="border-width: 1.5px; border-style: solid; border-color: #ff5722;">
+                <!-- Foe mini card -->
+                <div class="real-tcg-card" style="border-color: #ff5722; padding: 2px;">
+                  <div class="card-header-row" style="font-size: 0.2rem;">
+                    <span class="card-name-title" style="font-size: 0.22rem;">Fénix del M.</span>
+                    <span class="card-level-tag" style="font-size: 0.22rem; width: 5px; height: 5px; background: #ff5722;">2</span>
+                  </div>
+                  <div class="card-body-area" style="min-height: 12px;">
+                    <span class="card-ability-badge" style="font-size: 0.16rem; transform: scale(0.65); border-color: #ff5722; color: #ff7043; background: rgba(255,87,34,0.1); left: 1px; top: 1px;">RESURR.</span>
+                    <span class="card-core-letters" style="font-size: 0.4rem; color: #ff5722; line-height: 1;">FE</span>
+                  </div>
+                  <div class="card-stats-row" style="font-size: 0.22rem; padding-top: 0px; border-top-width: 0.5px;">
+                    <span class="stat-val--atk" style="color: #ffab40;">2</span>
+                    <span class="stat-divider">|</span>
+                    <span class="stat-val--res">2</span>
+                  </div>
+                </div>
+              </div>
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+            </div>
+
+            <!-- Divider Line with Combat Laser Arrows -->
+            <div class="arena-divider" style="height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);">
+              <div class="attack-arrow is-attacking" style="left: 50%; height: 20px; top: -10px; width: 2px;"></div>
+            </div>
+
+            <!-- Player Lanes -->
+            <div class="arena-lane-row" style="gap: 3px;">
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+              <div class="arena-lane-slot" style="border-width: 1.5px; border-style: solid; border-color: #cddc39;">
+                <!-- Player mini card -->
+                <div class="real-tcg-card" style="border-color: #ffab40; padding: 2px;">
+                  <div class="card-header-row" style="font-size: 0.2rem;">
+                    <span class="card-name-title" style="font-size: 0.22rem;">Cuervo de la M.</span>
+                    <span class="card-level-tag" style="font-size: 0.22rem; width: 5px; height: 5px;">2</span>
+                  </div>
+                  <div class="card-body-area" style="min-height: 12px;">
+                    <span class="card-ability-badge" style="font-size: 0.16rem; transform: scale(0.65); left: 1px; top: 1px;">VUELA</span>
+                    <span class="card-core-letters" style="font-size: 0.4rem; line-height: 1;">CU</span>
+                  </div>
+                  <div class="card-stats-row" style="font-size: 0.22rem; padding-top: 0px; border-top-width: 0.5px;">
+                    <span class="stat-val--atk">3</span>
+                    <span class="stat-divider">|</span>
+                    <span class="stat-val--res">1</span>
+                  </div>
+                </div>
+              </div>
+              <div class="arena-lane-slot" style="border-width: 1.5px; border-style: solid; border-color: #cddc39;">
+                <!-- Player mini card 2 -->
+                <div class="real-tcg-card" style="border-color: #ffab40; padding: 2px;">
+                  <div class="card-header-row" style="font-size: 0.2rem;">
+                    <span class="card-name-title" style="font-size: 0.22rem;">Alas de Ceniza</span>
+                    <span class="card-level-tag" style="font-size: 0.22rem; width: 5px; height: 5px;">1</span>
+                  </div>
+                  <div class="card-body-area" style="min-height: 12px;">
+                    <span class="card-ability-badge" style="font-size: 0.16rem; transform: scale(0.65); left: 1px; top: 1px;">RÁPIDO</span>
+                    <span class="card-core-letters" style="font-size: 0.4rem; line-height: 1;">AL</span>
+                  </div>
+                  <div class="card-stats-row" style="font-size: 0.22rem; padding-top: 0px; border-top-width: 0.5px;">
+                    <span class="stat-val--atk">2</span>
+                    <span class="stat-divider">|</span>
+                    <span class="stat-val--res">1</span>
+                  </div>
+                </div>
+              </div>
+              <div class="arena-lane-slot" style="border-width: 1px; border-style: dashed; border-color: #3a352e;"></div>
+            </div>
+          </div>
+
+          <!-- Discard Pile (Right Sidebar) -->
+          <div class="sidebar-slot sidebar-slot--discard" style="width: 24px; height: 35px; border-radius: 4px; font-size: 0.35rem; --discard-count: '0';">
+            <div class="discard-logo" style="width: 8px; height: 8px;"></div>
+            <span style="font-size: 0.2rem; scale: 0.8; margin-top: 2px;">DESC.</span>
+          </div>
+        </div>
+
+        <!-- Middle Banner representing current phase -->
+        <div style="background: #151311; border-top: 1px solid #2d2925; border-bottom: 1px solid #2d2925; padding: 2px 12px; display: flex; justify-content: space-between; align-items: center; font-family: monospace; font-size: 0.45rem; color: #ff8f00; margin: 3px 0;">
+          <span style="background: #ff5722; color: #fff; font-weight: 900; padding: 0.5px 4px; border-radius: 2px; font-size: 0.4rem; letter-spacing: 0.3px;">INVOCACIÓN</span>
+          <span style="color: #fff; font-weight: 700; letter-spacing: 0.5px;">▶ TU TURNO</span>
+          <span style="color: #ff8f00; font-weight: 700;">EVT · 10</span>
+        </div>
+
+        <!-- Player Turn Indicator & Energy -->
+        <div class="banner-row" style="padding: 0 12px; font-size: 0.5rem; margin-bottom: 2px;">
+          <span class="turn-text">
+            <span class="turn-dot" style="width: 4px; height: 4px;"></span>
+            <span>Tu Turno</span>
+            <span class="turn-dot-orange" style="width: 4px; height: 4px;"></span>
+            <span class="turn-dot-orange" style="width: 4px; height: 4px;"></span>
+          </span>
+          <span class="energy-badge" style="padding: 1px 5px; font-size: 0.5rem;">⚡ 3</span>
+        </div>
+
+        <!-- Player Segmented HP Bar -->
+        <div class="hp-row" style="padding: 0 12px; font-size: 0.55rem; margin-bottom: 6px;">
+          <span>HP 20</span>
+          <div class="hp-segmented-bar" style="height: 8px; border-width: 1px;">
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+          </div>
+        </div>
+
+        <!-- Fanned Hand Deck Pile -->
+        <div class="player-hand-container" style="height: 60px; margin: 2px 12px 6px 12px; padding-bottom: 3px; border-radius: 8px; background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 100%);">
+          <!-- Hand cards in fanned layout -->
+          <div class="hand-card-wrapper" style="transform: rotate(-12deg) translateX(-28px) translateY(2px); width: 34px; height: 48px;">
+            <div class="real-tcg-card" style="padding: 2px;">
+              <div class="card-header-row" style="font-size: 0.16rem;">
+                <span class="card-name-title" style="font-size: 0.18rem;">Cuervo de la M.</span>
+                <span class="card-level-tag" style="font-size: 0.18rem; width: 4px; height: 4px;">2</span>
+              </div>
+              <div class="card-body-area" style="min-height: 10px;">
+                <span class="card-ability-badge" style="font-size: 0.14rem; transform: scale(0.55); left: 0.5px; top: 0.5px;">VUELA</span>
+                <span class="card-core-letters" style="font-size: 0.3rem;">CU</span>
+              </div>
+              <div class="card-stats-row" style="font-size: 0.18rem; padding-top: 0px; border-top-width: 0.5px;">
+                <span class="stat-val--atk">3</span>
+                <span class="stat-divider">|</span>
+                <span class="stat-val--res">1</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hand-card-wrapper" style="transform: rotate(-4deg) translateX(-10px) translateY(0.5px); width: 34px; height: 48px;">
+            <div class="real-tcg-card" style="padding: 2px;">
+              <div class="card-header-row" style="font-size: 0.16rem;">
+                <span class="card-name-title" style="font-size: 0.18rem;">Fénix del Mañ.</span>
+                <span class="card-level-tag" style="font-size: 0.18rem; width: 4px; height: 4px;">2</span>
+              </div>
+              <div class="card-body-area" style="min-height: 10px;">
+                <span class="card-ability-badge" style="font-size: 0.14rem; transform: scale(0.55); left: 0.5px; top: 0.5px;">RESURR.</span>
+                <span class="card-core-letters" style="font-size: 0.3rem;">FE</span>
+              </div>
+              <div class="card-stats-row" style="font-size: 0.18rem; padding-top: 0px; border-top-width: 0.5px;">
+                <span class="stat-val--atk">2</span>
+                <span class="stat-divider">|</span>
+                <span class="stat-val--res">2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hand-card-wrapper" style="transform: rotate(4deg) translateX(10px) translateY(0.5px); width: 34px; height: 48px;">
+            <div class="real-tcg-card" style="padding: 2px;">
+              <div class="card-header-row" style="font-size: 0.16rem;">
+                <span class="card-name-title" style="font-size: 0.18rem;">Búho Oscuro</span>
+                <span class="card-level-tag" style="font-size: 0.18rem; width: 4px; height: 4px;">1</span>
+              </div>
+              <div class="card-body-area" style="min-height: 10px;">
+                <span class="card-ability-badge" style="font-size: 0.14rem; transform: scale(0.55); left: 0.5px; top: 0.5px;">VELO</span>
+                <span class="card-core-letters" style="font-size: 0.3rem;">BU</span>
+              </div>
+              <div class="card-stats-row" style="font-size: 0.18rem; padding-top: 0px; border-top-width: 0.5px;">
+                <span class="stat-val--atk">1</span>
+                <span class="stat-divider">|</span>
+                <span class="stat-val--res">2</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="hand-card-wrapper" style="transform: rotate(12deg) translateX(28px) translateY(2px); width: 34px; height: 48px;">
+            <div class="real-tcg-card" style="padding: 2px;">
+              <div class="card-header-row" style="font-size: 0.16rem;">
+                <span class="card-name-title" style="font-size: 0.18rem;">Alas de Ceniza</span>
+                <span class="card-level-tag" style="font-size: 0.18rem; width: 4px; height: 4px;">1</span>
+              </div>
+              <div class="card-body-area" style="min-height: 10px;">
+                <span class="card-ability-badge" style="font-size: 0.14rem; transform: scale(0.55); left: 0.5px; top: 0.5px;">RÁPIDO</span>
+                <span class="card-core-letters" style="font-size: 0.3rem;">AL</span>
+              </div>
+              <div class="card-stats-row" style="font-size: 0.18rem; padding-top: 0px; border-top-width: 0.5px;">
+                <span class="stat-val--atk">2</span>
+                <span class="stat-divider">|</span>
+                <span class="stat-val--res">1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Pillars Section -->
+    <section aria-labelledby="pillars-header">
+      <h2 class="pillars-title" id="pillars-header">Las Tres Claves del Vacío</h2>
+      <div class="pillars-grid">
+        <!-- Pillar 1 -->
+        <article class="pillar-card">
+          <span class="pillar-icon">⚡</span>
+          <h3 class="pillar-title">Sistema "Ekko"</h3>
+          <p class="pillar-desc">
+            El recurso de invocación que no gastas al final de tu turno <strong>no se pierde: se conserva y acumula</strong>. Planifica grandes despliegues guardando energía de turnos pasados.
+          </p>
+        </article>
+
+        <!-- Pillar 2 -->
+        <article class="pillar-card">
+          <span class="pillar-icon">🌀</span>
+          <h3 class="pillar-title">Eventos Cíclicos</h3>
+          <p class="pillar-desc">
+            Al final de cada ciclo de turnos, ambos jugadores roban de la <strong>Pila de Eventos Compartida</strong>. El clima, la radiación o desastres mutan las reglas y triturarán tus planes al instante.
+          </p>
+        </article>
+
+        <!-- Pillar 3 -->
+        <article class="pillar-card">
+          <span class="pillar-icon">✦</span>
+          <h3 class="pillar-title">Mecánica de Legado</h3>
+          <p class="pillar-desc">
+            Las batallas se juegan al Mejor de 3 rondas. Las criaturas destruidas por eventos clave son **removidas para el resto del match**, mientras que los bufos se **graban en el legado** de tu carta para siempre.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Showcase Creatures Section -->
+    <section class="showcase-section" aria-labelledby="showcase-header">
+      <h2 class="showcase-title" id="showcase-header">Criaturas Destacadas</h2>
+      <p class="showcase-subtitle">Explora los seres biomecánicos y mutaciones bioluminiscentes que pueblan el páramo del vacío.</p>
+      
+      <div class="cards-flex">
+        <!-- TCG Card 1 -->
+        <article class="tcg-card" onclick="window.location.href='./Paginas/Bestiario.html'">
+          <div class="tcg-header">
+            <h3 class="tcg-name">Cuervo de la Muerte</h3>
+            <span class="tcg-level">2</span>
+          </div>
+          <div class="tcg-art tcg-art--death">
+            <div class="art-glyph art-glyph--death"></div>
+          </div>
+          <div class="tcg-type">Familia: Aves (Cuervo)</div>
+          <div class="tcg-ability">
+            <strong>Habilidad Especial:</strong> Vuela. Acelera la entropía transformando lo vivo en cenizas.
+          </div>
+          <div class="tcg-stats">
+            <div class="tcg-stat-badge tcg-stat-badge--atk">⚔ 3 ATK</div>
+            <div class="tcg-stat-badge tcg-stat-badge--hp">🛡 1 HP</div>
+          </div>
+        </article>
+
+        <!-- TCG Card 2 -->
+        <article class="tcg-card" onclick="window.location.href='./Paginas/Bestiario.html'">
+          <div class="tcg-header">
+            <h3 class="tcg-name">Fénix del Mañana</h3>
+            <span class="tcg-level">2</span>
+          </div>
+          <div class="tcg-art tcg-art--phoenix">
+            <div class="art-glyph art-glyph--phoenix"></div>
+          </div>
+          <div class="tcg-type">Familia: Aves (Fénix)</div>
+          <div class="tcg-ability">
+            <strong>Habilidad Especial:</strong> Vuela. Resurrección: Se alimenta de radiación ambiental para renacer.
+          </div>
+          <div class="tcg-stats">
+            <div class="tcg-stat-badge tcg-stat-badge--atk">⚔ 2 ATK</div>
+            <div class="tcg-stat-badge tcg-stat-badge--hp">🛡 2 HP</div>
+          </div>
+        </article>
+
+        <!-- TCG Card 3 -->
+        <article class="tcg-card" onclick="window.location.href='./Paginas/Bestiario.html'">
+          <div class="tcg-header">
+            <h3 class="tcg-name">Búho Oscuro</h3>
+            <span class="tcg-level">1</span>
+          </div>
+          <div class="tcg-art tcg-art--owl">
+            <div class="art-glyph art-glyph--owl"></div>
+          </div>
+          <div class="tcg-type">Familia: Aves (Búho)</div>
+          <div class="tcg-ability">
+            <strong>Habilidad Especial:</strong> Vuela. Pesado. Recolector. Aplica Velo de Ceguera al atacar.
+          </div>
+          <div class="tcg-stats">
+            <div class="tcg-stat-badge tcg-stat-badge--atk">⚔ 1 ATK</div>
+            <div class="tcg-stat-badge tcg-stat-badge--hp">🛡 2 HP</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Combat Simulator Section -->
+    <section class="sim-section" aria-labelledby="sim-header">
+      <h2 class="sim-title" id="sim-header">Simulador de Tablero EKKO</h2>
+      <p class="sim-desc">
+        Interactúa con la arena real del vacío. Selecciona cartas de tu mano en abanico, invócalas en tus carriles gastando energía y presiona para iniciar el combate táctico.
+      </p>
+
+      <!-- Smartphone Container -->
+      <div class="sim-phone-wrapper">
+        <!-- Angled Debug Banner -->
+        <div class="debug-ribbon">DEBUG</div>
+
+        <!-- Superior Phone Status Bar -->
+        <div class="phone-status-bar">
+          <span>20:07</span>
+          <span>📶 🛜 71% 🔋</span>
+        </div>
+
+        <!-- Shared Events Deck (top center) -->
+        <div class="shared-events">
+          <div class="event-card-back">E</div>
+          <div class="event-card-back">E</div>
+          <div class="event-card-back">E</div>
+          <div class="event-card-back">E</div>
+          <div class="event-card-back">E</div>
+        </div>
+
+        <!-- Opponent Turn Indicator & Energy -->
+        <div class="banner-row" style="margin-top: 4px;">
+          <span class="turn-text turn-text--inactive" id="foe-turn-banner">
+            <span class="turn-dot turn-dot--inactive"></span>
+            <span>Turno del Oponente</span>
+          </span>
+          <span class="energy-badge">⚡ <span id="foe-energy-val">0</span></span>
+        </div>
+
+        <!-- Opponent Segmented HP Bar -->
+        <div class="hp-row">
+          <span>HP <span id="foe-hp-val">20</span></span>
+          <div class="hp-segmented-bar" id="foe-hp-bar">
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+          </div>
+        </div>
+
+        <!-- Active Battle Arena Grid -->
+        <div class="arena-wrapper">
+          <!-- Deck Pile (Left Sidebar) -->
+          <div class="sidebar-slot sidebar-slot--deck" id="deck-pile-slot">
+            <span class="deck-logo">E</span>
+            <span style="font-size: 0.28rem; scale: 0.9; margin-top: 2px;">MAZO</span>
+          </div>
+
+          <!-- Board lanes -->
+          <div class="arena-grid-lanes">
+            <!-- Foe Lanes -->
+            <div class="arena-lane-row" id="foe-lane-row">
+              <div class="arena-lane-slot" data-lane="0" id="foe-slot-0"></div>
+              <div class="arena-lane-slot" data-lane="1" id="foe-slot-1"></div>
+              <div class="arena-lane-slot" data-lane="2" id="foe-slot-2"></div>
+              <div class="arena-lane-slot" data-lane="3" id="foe-slot-3"></div>
+              <div class="arena-lane-slot" data-lane="4" id="foe-slot-4"></div>
+            </div>
+
+            <!-- Divider Line with Combat Laser Arrows -->
+            <div class="arena-divider">
+              <div class="attack-arrow" id="laser-0" style="left: 10%;"></div>
+              <div class="attack-arrow" id="laser-1" style="left: 30%;"></div>
+              <div class="attack-arrow" id="laser-2" style="left: 50%;"></div>
+              <div class="attack-arrow" id="laser-3" style="left: 70%;"></div>
+              <div class="attack-arrow" id="laser-4" style="left: 90%;"></div>
+            </div>
+
+            <!-- Player Lanes -->
+            <div class="arena-lane-row" id="player-lane-row">
+              <div class="arena-lane-slot" data-lane="0" id="player-slot-0" onclick="handleLaneClick(0)"></div>
+              <div class="arena-lane-slot" data-lane="1" id="player-slot-1" onclick="handleLaneClick(1)"></div>
+              <div class="arena-lane-slot" data-lane="2" id="player-slot-2" onclick="handleLaneClick(2)"></div>
+              <div class="arena-lane-slot" data-lane="3" id="player-slot-3" onclick="handleLaneClick(3)"></div>
+              <div class="arena-lane-slot" data-lane="4" id="player-slot-4" onclick="handleLaneClick(4)"></div>
+            </div>
+          </div>
+
+          <!-- Discard Pile (Right Sidebar) -->
+          <div class="sidebar-slot sidebar-slot--discard" id="discard-pile-slot">
+            <div class="discard-logo"></div>
+            <span style="font-size: 0.28rem; scale: 0.9; margin-top: 4px;">DESC.</span>
+          </div>
+        </div>
+
+        <!-- Middle Banner representing current phase -->
+        <div style="background: #151311; border-top: 1.5px solid #2d2925; border-bottom: 1.5px solid #2d2925; padding: 4px 16px; display: flex; justify-content: space-between; align-items: center; font-family: monospace; font-size: 0.6rem; color: #ff8f00; margin: 6px 0;">
+          <span style="background: #ff5722; color: #fff; font-weight: 900; padding: 1px 6px; border-radius: 3px; font-size: 0.52rem; letter-spacing: 0.5px;" id="phase-badge">INVOCACIÓN</span>
+          <span style="color: #fff; font-weight: 700; letter-spacing: 1px;" id="middle-turn-text">▶ TU TURNO</span>
+          <span style="color: #ff8f00; font-weight: 700;">EVT · 10</span>
+        </div>
+
+        <!-- Player Turn Indicator & Energy -->
+        <div class="banner-row">
+          <span class="turn-text" id="player-turn-banner">
+            <span class="turn-dot"></span>
+            <span>Tu Turno</span>
+            <span class="turn-dot-orange"></span>
+            <span class="turn-dot-orange"></span>
+          </span>
+          <span class="energy-badge">⚡ <span id="player-energy-val">3</span></span>
+        </div>
+
+        <!-- Player Segmented HP Bar -->
+        <div class="hp-row">
+          <span>HP <span id="player-hp-val">20</span></span>
+          <div class="hp-segmented-bar" id="player-hp-bar">
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+            <div class="hp-segment"></div>
+          </div>
+        </div>
+
+        <!-- Fanned Hand Deck Pile -->
+        <div class="player-hand-container" id="player-hand">
+          <!-- Dyn Hand -->
+        </div>
+
+        <!-- Controls inside mobile phone frame -->
+        <button class="action-btn-draw" id="draw-btn" onclick="handleDrawClick()">
+          ⚡ Robar carta (-1 ⚡)
+        </button>
+
+        <button class="action-btn-primary" id="primary-action-btn" onclick="handlePrimaryAction()">
+          Terminar invocación
+        </button>
+      </div>
+
+      <!-- User Feedback Panel below phone -->
+      <div style="max-width: 412px; margin: 10px auto; padding: 10px; background: #1c1815; border-left: 4px solid #ffab40; border-radius: 4px; font-size: 0.85rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: #ffab40; text-align: center; min-height: 20px;" id="sim-feedback">
+        Elige una carta de tu mano para invocarla en uno de tus 5 carriles.
+      </div>
+    </section>
   </main>
 
-<footer>
-    <h5><center>Todos los derechos al lado del izquierdo 2026</center></h5>
-</footer>
+  <footer>
+    <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
+  </footer>
 
+  <script>
+    /* High-Fidelity Interactive Combat Simulator Logic */
+    const CARD_POOL = [
+      { name: "Cuervo de la Muerte", code: "CU", level: 2, ability: "VUELA", type: "CUERVO", atk: 3, res: 1 },
+      { name: "Fénix del Mañana", code: "FE", level: 2, ability: "RESURR.", type: "FÉNIX", atk: 2, res: 2 },
+      { name: "Búho Oscuro", code: "BU", level: 1, ability: "VELO", type: "BÚHO", atk: 1, res: 2 },
+      { name: "Alas de Ceniza", code: "AL", level: 1, ability: "RÁPIDO", type: "ALAS", atk: 2, res: 1 },
+      { name: "Gato del Vacío", code: "GA", level: 1, ability: "SIGILO", type: "FELINO", atk: 1, res: 1 }
+    ];
+
+    let playerHP = 20;
+    let foeHP = 20;
+    let playerEnergy = 3;
+    let foeEnergy = 0;
+    
+    let hand = [];
+    let playerBoard = [null, null, null, null, null];
+    let foeBoard = [null, null, null, null, null];
+    
+    let phase = "SUMMON"; // "SUMMON", "COMBAT"
+    let selectedHandCardIndex = null;
+    
+    let deckCount = 15;
+    let discardCount = 0;
+    let isAnimating = false;
+
+    // Web Audio Synthesizer Cues
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playSound(freqs, type, duration, volume) {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freqs[0], audioCtx.currentTime);
+        if (freqs.length > 1) {
+          osc.frequency.exponentialRampToValueAtTime(freqs[1], audioCtx.currentTime + duration);
+        }
+
+        gainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio bypass:", e);
+      }
+    }
+
+    function playSwooshSound() {
+      playSound([150, 800], "sine", 0.3, 0.15);
+    }
+
+    function playHitSound() {
+      playSound([200, 60], "triangle", 0.2, 0.3);
+    }
+
+    function playSelectSound() {
+      playSound([600, 900], "sine", 0.12, 0.1);
+    }
+
+    function playDrawSound() {
+      playSound([100, 260], "triangle", 0.15, 0.15);
+    }
+
+    function playSummonSound() {
+      playSound([300, 600], "sine", 0.2, 0.18);
+    }
+
+    function playVictorySound() {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const notes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            playSound([freq, freq], "sine", 0.35, 0.15);
+          }, idx * 180);
+        });
+      } catch (e) {}
+    }
+
+    function playDefeatSound() {
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const notes = [311.13, 293.66, 220.00]; // Eb4, D4, A3
+        notes.forEach((freq, idx) => {
+          setTimeout(() => {
+            playSound([freq, freq - 10], "sawtooth", 0.45, 0.15);
+          }, idx * 250);
+        });
+      } catch (e) {}
+    }
+
+    function initSimulator() {
+      playerHP = 20;
+      foeHP = 20;
+      playerEnergy = 3;
+      foeEnergy = 0;
+      deckCount = 15;
+      discardCount = 0;
+      selectedHandCardIndex = null;
+      phase = "SUMMON";
+      isAnimating = false;
+
+      playerBoard = [null, null, null, null, null];
+      foeBoard = [null, null, null, null, null];
+
+      // Deal 3 starter cards
+      hand = [
+        { ...CARD_POOL[0] }, // Cuervo
+        { ...CARD_POOL[1] }, // Fénix
+        { ...CARD_POOL[3] }  // Alas
+      ];
+      deckCount = 12;
+
+      updateUIElements();
+      updateHP(true, playerHP);
+      updateHP(false, foeHP);
+      renderHand();
+      renderBoard();
+
+      showFeedback("Simulador iniciado. Invoca criaturas y gestiona tus recursos.");
+    }
+
+    function showFeedback(msg) {
+      document.getElementById("sim-feedback").innerText = msg;
+    }
+
+    function updateUIElements() {
+      document.getElementById("player-energy-val").innerText = playerEnergy;
+      document.getElementById("foe-energy-val").innerText = foeEnergy;
+
+      // Update Deck and Discard Counts using CSS variables on the sidebar elements
+      const deckSlot = document.getElementById("deck-pile-slot");
+      const discardSlot = document.getElementById("discard-pile-slot");
+
+      if (deckSlot) deckSlot.style.setProperty("--deck-count", `"${deckCount}"`);
+      if (discardSlot) discardSlot.style.setProperty("--discard-count", `"${discardCount}"`);
+
+      // Controls state
+      const drawBtn = document.getElementById("draw-btn");
+      const primaryBtn = document.getElementById("primary-action-btn");
+
+      if (phase === "SUMMON") {
+        drawBtn.disabled = false;
+        drawBtn.style.opacity = "1";
+        primaryBtn.innerText = "Terminar invocación";
+        
+        // Update banners
+        document.getElementById("phase-badge").innerText = "INVOCACIÓN";
+        document.getElementById("phase-badge").style.background = "#ff5722";
+        document.getElementById("middle-turn-text").innerText = "▶ TU TURNO";
+        
+        // Turn active styling
+        document.getElementById("player-turn-banner").classList.remove("turn-text--inactive");
+        const playerDot = document.getElementById("player-turn-banner").querySelector(".turn-dot");
+        if (playerDot) playerDot.classList.remove("turn-dot--inactive");
+        
+        document.getElementById("foe-turn-banner").classList.add("turn-text--inactive");
+        const foeDot = document.getElementById("foe-turn-banner").querySelector(".turn-dot");
+        if (foeDot) foeDot.classList.add("turn-dot--inactive");
+      } else {
+        drawBtn.disabled = true;
+        drawBtn.style.opacity = "0.4";
+        primaryBtn.innerText = "¡INICIAR COMBATE!";
+        
+        document.getElementById("phase-badge").innerText = "COMBATE";
+        document.getElementById("phase-badge").style.background = "#c62828";
+        document.getElementById("middle-turn-text").innerText = "◀ COMBATE";
+      }
+    }
+
+    function updateHP(isPlayer, hp) {
+      const prefix = isPlayer ? "player" : "foe";
+      const valDisplay = document.getElementById(`${prefix}-hp-val`);
+      if (valDisplay) valDisplay.innerText = hp;
+
+      const bar = document.getElementById(`${prefix}-hp-bar`);
+      if (bar) {
+        const segments = bar.getElementsByClassName("hp-segment");
+        const litSegments = Math.ceil(hp / 4); // 20 HP / 4 = 5 segments
+        for (let i = 0; i < 5; i++) {
+          if (i < litSegments) {
+            segments[i].classList.remove("is-damaged");
+          } else {
+            segments[i].classList.add("is-damaged");
+          }
+        }
+      }
+    }
+
+    function renderHand() {
+      const handContainer = document.getElementById("player-hand");
+      if (!handContainer) return;
+      handContainer.innerHTML = "";
+
+      const totalCards = hand.length;
+      hand.forEach((card, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "hand-card-wrapper";
+        
+        let angle = 0;
+        let translateX = 0;
+        let translateY = 0;
+
+        if (totalCards > 1) {
+          const maxAngle = Math.min(8, 30 / (totalCards - 1 || 1));
+          const startAngle = -((totalCards - 1) * maxAngle) / 2;
+          angle = startAngle + index * maxAngle;
+
+          const maxSpreadX = Math.min(45, 180 / (totalCards - 1 || 1));
+          const startX = -((totalCards - 1) * maxSpreadX) / 2;
+          translateX = startX + index * maxSpreadX;
+
+          const centerIndex = (totalCards - 1) / 2;
+          const distanceFromCenter = Math.abs(index - centerIndex);
+          translateY = distanceFromCenter * distanceFromCenter * 2.2;
+        }
+
+        wrapper.style.transform = `rotate(${angle}deg) translateX(${translateX}px) translateY(${translateY}px)`;
+        wrapper.style.zIndex = index + 1;
+
+        wrapper.innerHTML = `
+          <div class="real-tcg-card ${selectedHandCardIndex === index ? 'selected-outline' : ''}" onclick="event.stopPropagation(); handleHandCardClick(${index})">
+            <div class="card-header-row">
+              <span class="card-name-title">${card.name}</span>
+              <span class="card-level-tag">${card.level}</span>
+            </div>
+            <div class="card-body-area">
+              <span class="card-ability-badge">${card.ability}</span>
+              <span class="card-core-letters">${card.code}</span>
+              <span class="card-type-pill">${card.type}</span>
+            </div>
+            <div class="card-stats-row">
+              <span class="stat-val--atk">${card.atk}</span>
+              <span class="stat-divider">|</span>
+              <span class="stat-val--res">${card.res}</span>
+            </div>
+          </div>
+        `;
+        handContainer.appendChild(wrapper);
+      });
+    }
+
+    function renderBoard() {
+      for (let i = 0; i < 5; i++) {
+        const playerSlot = document.getElementById("player-slot-" + i);
+        const foeSlot = document.getElementById("foe-slot-" + i);
+
+        if (playerSlot) {
+          if (playerBoard[i] !== null) {
+            const card = playerBoard[i];
+            playerSlot.innerHTML = `
+              <div class="real-tcg-card">
+                <div class="card-header-row">
+                  <span class="card-name-title" style="font-size: 0.28rem;">${card.name}</span>
+                  <span class="card-level-tag" style="font-size: 0.28rem; width: 6px; height: 6px;">${card.level}</span>
+                </div>
+                <div class="card-body-area">
+                  <span class="card-ability-badge" style="font-size: 0.22rem; transform: scale(0.7);">${card.ability}</span>
+                  <span class="card-core-letters" style="font-size: 0.6rem;">${card.code}</span>
+                  <span class="card-type-pill" style="font-size: 0.2rem; transform: scale(0.7);">${card.type}</span>
+                </div>
+                <div class="card-stats-row" style="font-size: 0.3rem;">
+                  <span class="stat-val--atk">${card.atk}</span>
+                  <span class="stat-divider">|</span>
+                  <span class="stat-val--res">${card.res}</span>
+                </div>
+              </div>
+            `;
+          } else {
+            playerSlot.innerHTML = "";
+          }
+        }
+
+        if (foeSlot) {
+          if (foeBoard[i] !== null) {
+            const card = foeBoard[i];
+            foeSlot.innerHTML = `
+              <div class="real-tcg-card" style="border-color: #ff5722;">
+                <div class="card-header-row">
+                  <span class="card-name-title" style="font-size: 0.28rem;">${card.name}</span>
+                  <span class="card-level-tag" style="font-size: 0.28rem; width: 6px; height: 6px; background: #ff5722;">${card.level}</span>
+                </div>
+                <div class="card-body-area">
+                  <span class="card-ability-badge" style="font-size: 0.22rem; transform: scale(0.7); border-color: #ff5722; color: #ff7043; background: rgba(255,87,34,0.1);">${card.ability}</span>
+                  <span class="card-core-letters" style="font-size: 0.6rem; color: #ff5722;">${card.code}</span>
+                  <span class="card-type-pill" style="font-size: 0.2rem; transform: scale(0.7); background: #3e2723;">${card.type}</span>
+                </div>
+                <div class="card-stats-row" style="font-size: 0.3rem;">
+                  <span class="stat-val--atk" style="color: #ffab40;">${card.atk}</span>
+                  <span class="stat-divider">|</span>
+                  <span class="stat-val--res">${card.res}</span>
+                </div>
+              </div>
+            `;
+          } else {
+            foeSlot.innerHTML = "";
+          }
+        }
+      }
+    }
+
+    function handleHandCardClick(index) {
+      if (phase !== "SUMMON" || isAnimating) return;
+
+      if (selectedHandCardIndex === index) {
+        // Deselect
+        selectedHandCardIndex = null;
+        clearHighlights();
+      } else {
+        selectedHandCardIndex = index;
+        playSelectSound();
+        highlightAvailableLanes();
+      }
+      renderHand();
+    }
+
+    function highlightAvailableLanes() {
+      for (let i = 0; i < 5; i++) {
+        const slot = document.getElementById("player-slot-" + i);
+        if (slot) {
+          if (playerBoard[i] === null) {
+            slot.classList.add("player-highlight");
+          } else {
+            slot.classList.remove("player-highlight");
+          }
+        }
+      }
+    }
+
+    function clearHighlights() {
+      for (let i = 0; i < 5; i++) {
+        const slot = document.getElementById("player-slot-" + i);
+        if (slot) slot.classList.remove("player-highlight");
+      }
+    }
+
+    function handleLaneClick(laneIndex) {
+      if (phase !== "SUMMON" || selectedHandCardIndex === null || isAnimating) return;
+
+      if (playerBoard[laneIndex] !== null) {
+        showFeedback("¡Este carril ya está ocupado!");
+        return;
+      }
+
+      const card = hand[selectedHandCardIndex];
+      if (playerEnergy < card.level) {
+        showFeedback(`Energía insuficiente. Invocar a ${card.name} cuesta ⚡ ${card.level}.`);
+        return;
+      }
+
+      // Summon
+      playSummonSound();
+      playerEnergy -= card.level;
+      playerBoard[laneIndex] = { ...card }; // Deep copy
+      hand.splice(selectedHandCardIndex, 1);
+      
+      selectedHandCardIndex = null;
+      clearHighlights();
+      
+      renderHand();
+      renderBoard();
+      updateUIElements();
+      
+      showFeedback(`Invocaste a ${card.name} en el carril ${laneIndex + 1}.`);
+    }
+
+    function handleDrawClick() {
+      if (phase !== "SUMMON" || isAnimating) return;
+
+      if (playerEnergy < 1) {
+        showFeedback("Energía insuficiente para robar una carta. Requiere ⚡ 1.");
+        return;
+      }
+
+      if (deckCount <= 0) {
+        showFeedback("¡No quedan cartas en tu mazo!");
+        return;
+      }
+
+      playDrawSound();
+      playerEnergy -= 1;
+      deckCount -= 1;
+
+      const randomCard = CARD_POOL[Math.floor(Math.random() * CARD_POOL.length)];
+      hand.push({ ...randomCard });
+
+      renderHand();
+      updateUIElements();
+      showFeedback(`Robaste ${randomCard.name} de tu mazo.`);
+    }
+
+    function handlePrimaryAction() {
+      if (isAnimating) return;
+
+      if (phase === "SUMMON") {
+        // Transition to Combat
+        phase = "COMBAT";
+        
+        // Opponent summons random defenders to challenge player
+        const activePlayerLanes = playerBoard.reduce((acc, card, idx) => card ? acc.concat(idx) : acc, []);
+        let defenderPlaced = false;
+
+        activePlayerLanes.forEach(lane => {
+          // 70% chance to put a defender if player has an active card in lane
+          if (Math.random() < 0.7 && foeBoard[lane] === null) {
+            const randCard = CARD_POOL[Math.floor(Math.random() * CARD_POOL.length)];
+            foeBoard[lane] = { ...randCard };
+            defenderPlaced = true;
+          }
+        });
+
+        // Ensure at least 1 defender is on board to keep it interesting
+        if (!defenderPlaced) {
+          const targetLane = Math.floor(Math.random() * 5);
+          const randCard = CARD_POOL[Math.floor(Math.random() * CARD_POOL.length)];
+          foeBoard[targetLane] = { ...randCard };
+        }
+
+        renderBoard();
+        updateUIElements();
+        playSelectSound();
+        showFeedback("¡El rival despliega defensas! Haz clic en '¡INICIAR COMBATE!' para atacar.");
+      } else if (phase === "COMBAT") {
+        runCombat();
+      }
+    }
+
+    function runCombat() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      const btn = document.getElementById("primary-action-btn");
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+
+      let currentLane = 0;
+
+      function fightLane() {
+        if (currentLane >= 5) {
+          // Resolve deaths at the end of the round
+          for (let i = 0; i < 5; i++) {
+            if (playerBoard[i] && playerBoard[i].res <= 0) {
+              playerBoard[i] = null;
+            }
+            if (foeBoard[i] && foeBoard[i].res <= 0) {
+              foeBoard[i] = null;
+              discardCount++;
+            }
+          }
+
+          renderBoard();
+          updateUIElements();
+
+          if (foeHP <= 0) {
+            showFeedback("🏆 ¡VICTORIA! El núcleo del Vacío rival ha sido colapsado.");
+            playVictorySound();
+            setTimeout(initSimulator, 4000);
+            return;
+          }
+
+          if (playerHP <= 0) {
+            showFeedback("💀 DERROTA. Has sido absorbido por la entropía del Vacío.");
+            playDefeatSound();
+            setTimeout(initSimulator, 4000);
+            return;
+          }
+
+          // Return to summon phase
+          phase = "SUMMON";
+          playerEnergy = Math.min(10, playerEnergy + 3); // Gain +3 Energy
+          
+          // Draw 1 card automatically for the new round
+          if (deckCount > 0) {
+            const randCard = CARD_POOL[Math.floor(Math.random() * CARD_POOL.length)];
+            hand.push({ ...randCard });
+            deckCount--;
+          }
+
+          renderHand();
+          renderBoard();
+          updateUIElements();
+          showFeedback("Fase de Invocación: Energía restablecida (+3 ⚡) y 1 carta robada.");
+          
+          isAnimating = false;
+          btn.disabled = false;
+          btn.style.opacity = "1";
+          return;
+        }
+
+        const playerCard = playerBoard[currentLane];
+        const foeCard = foeBoard[currentLane];
+
+        if (playerCard) {
+          showFeedback(`Carril ${currentLane + 1}: ¡Tu ${playerCard.name} inicia el ataque!`);
+          
+          // Slide card up
+          const pSlot = document.getElementById("player-slot-" + currentLane);
+          pSlot.style.transform = "translateY(-12px)";
+          
+          const laser = document.getElementById("laser-" + currentLane);
+          laser.classList.add("is-attacking");
+          playSwooshSound();
+
+          setTimeout(() => {
+            pSlot.style.transform = "translateY(0)";
+            laser.classList.remove("is-attacking");
+
+            if (foeCard) {
+              // Hit enemy card
+              const fSlot = document.getElementById("foe-slot-" + currentLane);
+              fSlot.classList.add("is-hit");
+              
+              foeCard.res -= playerCard.atk;
+              playHitSound();
+
+              setTimeout(() => {
+                fSlot.classList.remove("is-hit");
+                if (foeCard.res <= 0) {
+                  showFeedback(`Carril ${currentLane + 1}: ¡${foeCard.name} del rival ha sido reducida a cenizas!`);
+                  fSlot.innerHTML = `<span style="font-size: 0.5rem; color: #ff5722; font-weight:900;">CENIZAS</span>`;
+                } else {
+                  renderBoard();
+                }
+              }, 250);
+            } else {
+              // Direct hit to enemy HP
+              const fSlot = document.getElementById("foe-slot-" + currentLane);
+              fSlot.classList.add("is-hit");
+              
+              foeHP = Math.max(0, foeHP - playerCard.atk);
+              updateHP(false, foeHP);
+              playHitSound();
+              showFeedback(`Carril ${currentLane + 1}: ¡Ataque directo! Infliges ${playerCard.atk} de daño al rival.`);
+
+              setTimeout(() => {
+                fSlot.classList.remove("is-hit");
+              }, 250);
+            }
+          }, 300);
+
+          // Proceed to next lane after attack animation completes
+          setTimeout(() => {
+            currentLane++;
+            fightLane();
+          }, 700);
+
+        } else {
+          // No player card to attack in this lane - nothing happens
+          currentLane++;
+          fightLane();
+        }
+      }
+
+      fightLane();
+    }
+
+    // Document Click handler to clear selection
+    document.addEventListener("click", () => {
+      if (selectedHandCardIndex !== null && !isAnimating) {
+        selectedHandCardIndex = null;
+        clearHighlights();
+        renderHand();
+      }
+    });
+
+    // Start the simulator automatically on load
+    window.addEventListener("DOMContentLoaded", () => {
+      initSimulator();
+    });
+  </script>
 </body>
 </html>
-

@@ -18,6 +18,7 @@
       <a href="./Changelog.html">Changelog</a>
       <a href="./Roadmap.html">Roadmap</a>
       <a href="./Contacto.html">Contacto</a>
+      <a href="./Legales.html">Legales</a>
     </nav>
   </header>
 
@@ -131,44 +132,578 @@
       return (h || '').toString().trim();
     }
 
+    const FALLBACK_BESTIARIO = [
+      {
+        "codigo": "AA - 001",
+        "nombre": "Cuervo de la Muerte",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "3",
+        "resistencia": "1",
+        "nivel": "2",
+        "habilidad": "Vuela",
+        "estado": "REVISION",
+        "lore": "El Cuervo de la Muerte es la manifestación más sombría del vacío post-apocalíptico, un ser que no devora la carne, sino que consume la existencia misma. Actuando como un huésped para hongos bioluminiscentes de un tono cian enfermizo, esta criatura bípede acelera la entropía a su alrededor, convirtiendo lo vivo en ceniza blanca con solo su presencia. Envuelto en un plumaje de obsidiana polvorienta y adornado con un collar de ofrendas macabras, el Corvus Letalis camina entre estatuas de víctimas petrificadas, utilizando su mirada violeta para identificar aquellos cuyo tiempo ha llegado a su fin en el jardín de hierro del multiverso."
+      },
+      {
+        "codigo": "AA - 002",
+        "nombre": "Alas de Ceniza",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Vuela",
+        "estado": "REVISION",
+        "lore": "El Cuervo Alas de Ceniza es el espíritu errante de las zonas calcinadas, una anomalía biomecánica que existe en un estado de combustión perpetua. Su cuerpo, una estructura frágil de huesos porosos y piel agrietada por el calor, alberga un núcleo de brasas incandescentes que brilla con un naranja agónico a través de su pecho. Sus alas, compuestas por filamentos de carbono que se desintegran en cada aleteo, envuelven a sus presas en una nube asfixiante de hollín y partículas ardientes, convirtiendo el aire en un veneno abrasador. Desde lo alto de rascacielos carbonizados, el Corvus Cinereus observa con ojos de fuego, esperando el momento de descender como un rastro de humo letal sobre aquellos que aún conservan el calor de la vida."
+      },
+      {
+        "codigo": "AA - 003",
+        "nombre": "Cuervo de la Desolación",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Toxico. Vuela.",
+        "estado": "REVISION",
+        "lore": "El Cuervo de la Desolación es el depredador alfa del páramo, una titánica anomalía biomecánica que encarna la voluntad de la tierra por devorar los restos de la civilización. Su biología única le permite asimilar metal oxidado y hormigón en su propia estructura ósea, convirtiendo su cuerpo en un baluarte de plumas de obsidiana y tendones de acero. Como heraldo de la entropía, vigila desde tronos de escombros en los bosques de hierro, utilizando su visión cian radiactiva para localizar presas entre la niebla de ceniza, antes de lanzarse en un ataque bípede explosivo que tritura hueso y metal por igual bajo su pico de fundición bacteriana."
+      },
+      {
+        "codigo": "AA - 004",
+        "nombre": "Buho Oscuro",
+        "familia": "Aves",
+        "tipo": "Buho",
+        "poder": "1",
+        "resistencia": "2",
+        "nivel": "1",
+        "habilidad": "Pesado. Vuela. Recolector.",
+        "estado": "REVISION",
+        "lore": "Cuando el Búho Segador decide atacar, el aire mismo parece solidificarse. Su habilidad de \"Velo de Ceguera\" alcanza su punto máximo durante el descenso, distorsionando la realidad visual del objetivo. En esta pose, el búho se lanza desde las vigas superiores del sector industrial, con sus alas de fibra de carbono vibrando a una frecuencia que cancela el sonido del viento, convirtiéndose en un proyectil de vacío absoluto."
+      },
+      {
+        "codigo": "AA - 005",
+        "nombre": "Fenix del Mañana",
+        "familia": "Aves",
+        "tipo": "Fenix",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Vuela. Resurrección",
+        "estado": "REVISION",
+        "lore": "El Fénix del Mañana es la cima de la ingeniería energética del pasado. Una entidad biomecánica que no consume carne ni datos, sino que se alimenta de la radiación ambiental. Sus alas de plasma blanco y su cuerpo de oro blanco lo convierten en una deidad tecnológica en un mundo de chatarra. Su ciclo de \"muerte y resurrección\" es en realidad un proceso de autorreparación molecular ultrarrápido que utiliza los materiales del entorno para renacer. Es el \"Faro del Futuro\", un ser que transforma la destrucción en una nueva oportunidad de existencia a través de la fusión nuclear."
+      },
+      {
+        "codigo": "AA - 006",
+        "nombre": "Pico Toxico",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Toxico. Vuela.",
+        "estado": "REVISION",
+        "lore": "El Cuervo Pico Tóxico es una pesadilla bioquímica surgida de los vertederos industriales del viejo mundo. Actuando como un destilador orgánico de residuos, este depredador bípede secreta a través de su pico poroso un compuesto cáustico verde neón capaz de perforar las aleaciones más resistentes. Su cuerpo, cubierto por una piel de caucho aceitoso y púas de cristal ponzoñoso, exhala nubes de gas sulfúrico que marchitan la vida a su paso. Desde su trono de barriles oxidados y lodos hirvientes, el Corvus Virosus vigila con sus ojos de color amarillo azufre, esperando el momento de inyectar su cóctel letal en el torrente sanguíneo de cualquier intruso que ose cruzar su territorio contaminado."
+      },
+      {
+        "codigo": "AA - 007",
+        "nombre": "Halcones de Acero",
+        "familia": "Aves",
+        "tipo": "Halcon",
+        "poder": "1",
+        "resistencia": "4",
+        "nivel": "2",
+        "habilidad": "Vuela",
+        "estado": "REVISION",
+        "lore": "En el campo de batalla, su ataque es un evento silencioso hasta el momento del impacto. Los habitantes de las ciudades en ruinas los llaman \"Los Verdugos de Cromo\", ya que lo último que ve su presa es un destello plateado y una estela de chispas naranjas antes de que la presión del aire sea insoportable."
+      },
+      {
+        "codigo": "AA - 008",
+        "nombre": "Cuervo de Flores",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Diagonal. Vuela",
+        "estado": "REVISION",
+        "lore": "El Cuervo de Flores es el simbionte supremo de la zona cero, una asombrosa anomalía biomecánica que demuestra que la vida persiste incluso en el corazón de la desolación. Su cuerpo de metal y hueso ha sido asimilado por una red de enredaderas fotosintéticas que se alimentan de la radiación ionizante, transformando un heraldo de la muerte en un jardín viviente. Con alas de filigrana botánica que pulsan con energy cian y violeta, este depredador bípede hipnotiza a sus presas con polen alucinógeno y una mirada violeta profunda, antes de descender sobre ellas como un torbellino de belleza letal que tritura y absorbe, demostrando que en el multiverso post-apocalíptico, la flor más hermosa es a menudo la más mortal."
+      },
+      {
+        "codigo": "AA - 009",
+        "nombre": "Cuervo Acechador",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Tridente. Vuela",
+        "estado": "REVISION",
+        "lore": "El Cuervo Acechador es el asesino silencioso del páramo, una aberración biomecánica que ha sustituido el instinto carroñero por el hambre de energía residual. A diferencia de sus parientes masivos, su cuerpo esquelético está tejido con fibras ópticas y tendones de cable negro, permitiéndole vibrar en frecuencias que lo vuelven virtualmente invisible entre la estática de las zonas en ruinas. En lugar de ojos, una franja de sensores carmesí escanea el calor y los datos de sus presas, mientras que sus alas, similares a redes de cobre deshilachadas, le permiten trepar y acechar desde bosques de antenas y salas de servidores colapsadas, esperando el momento de conectar su pico-sonda cerámico para drena la vida eléctrica de todo lo que aún late."
+      },
+      {
+        "codigo": "AA - 010",
+        "nombre": "Opium",
+        "familia": "Aves",
+        "tipo": "Cuervo",
+        "poder": "2",
+        "resistencia": "5",
+        "nivel": "3",
+        "habilidad": "Vuela",
+        "estado": "REVISION",
+        "lore": "El Cuervo Opium es la manifestación física del olvido y la resistencia eterna en el páramo, una titánica anomalía bípede que existe en un estado de sopor perpetuo. Su cuerpo, una fortaleza de hueso marmóreo y metal oxidado cubierto por un plumaje de vidriería polvorienta, alberga un aura que disuelve la voluntad y la vida de cualquier intruso. Cien veces más denso que un mutante normal, el Corvus Sopora es invulnerable no por fuerza, sino por pura inercia biológica, absorbiendo ataques y tiempo por igual. Desde su trono de escombros en el centro de las ruinas, vigila con ojos vacíos, un monumento viviente que prueba que al final de todas las guerras, solo queda el sueño eterno de la entropía."
+      },
+      {
+        "codigo": "AA - 011",
+        "nombre": "Omega",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Manada",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 012",
+        "nombre": "Alfa",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Lider",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 013",
+        "nombre": "Cancerbero",
+        "familia": "Cazadores",
+        "tipo": "Quimera",
+        "poder": "1",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Tridente",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 014",
+        "nombre": "Acechador",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "3",
+        "resistencia": "1",
+        "nivel": "2",
+        "habilidad": "",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 015",
+        "nombre": "Cazador de Ruinas",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "3",
+        "resistencia": "3",
+        "nivel": "3",
+        "habilidad": "Manada",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 016",
+        "nombre": "Beta",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Manada",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 017",
+        "nombre": "Sombra Furtiva",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "2",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Etereo",
+        "estado": "REVISION",
+        "lore": "El Sombra Furtiva (Umbra Instans) es el asesino intangible del páramo, un depredador de anatomía bipedal cuya piel de nanocristales absorbe la luz para una infiltración total. Se desplaza en un acecho casi imperceptible, distorsionando el aire con un desfase térmico que le otorga una apariencia de \"humo mecánico\" mientras emana neblina de aceite negro para borrar su rastro. Su presencia solo es delatada por una fina hendidura de brillo violeta en su rostro justo antes de atacar."
+      },
+      {
+        "codigo": "AA - 018",
+        "nombre": "Rastreador de Cenizas",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "2",
+        "habilidad": "Alcance. Recolector.",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 019",
+        "nombre": "Vigilante del Paramo",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "1",
+        "resistencia": "2",
+        "nivel": "1",
+        "habilidad": "Guardia",
+        "estado": "REVISION",
+        "lore": "El Vigilante del Páramo es la espina dorsal de la red de defensa del ecosistema mecánico. Mientras que los Cazadores son los dientes, el Vigilante es la mirada. Es un depredador paciente que no persigue a su presa, sino que la conduce hacia las emboscadas de la manada mediante pulsos sónicos imperceptibles. Su cuerpo biomecánico está cubierto de sensores de movimiento y antenas filiformes que vibran con el viento, detectando el latido de un corazón orgánico a kilómetros de distancia."
+      },
+      {
+        "codigo": "AA - 020",
+        "nombre": "Chupacabras",
+        "familia": "Cazadores",
+        "tipo": "Cazador",
+        "poder": "5",
+        "resistencia": "1",
+        "nivel": "3",
+        "habilidad": "",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 021",
+        "nombre": "Hormiga Obrera",
+        "familia": "Insectoide",
+        "tipo": "Hormiga",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Colmena. Recolector.",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 022",
+        "nombre": "Araña de Axxia",
+        "familia": "Insectoide",
+        "tipo": "Araña",
+        "poder": "1",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Al morir buscas un \"Huevo de Araña\" en tu mazo y lo colocas en el campo",
+        "estado": "REVISION",
+        "lore": "No es una criatura sedentaria, su sistema está adaptado para reproducirse constantemente. Una vez deja su capullo sigue su camino, alimentándose de todo tipo de ser vivo que encuentre (y que sea capaz de matar) para proseguir engendrando su especie, lo que las hace particularmente peligrosas ya que se pueden encontrar en cualquier ecosistema"
+      },
+      {
+        "codigo": "AA - 023",
+        "nombre": "Huevo de Araña",
+        "familia": "Insectoide",
+        "tipo": "Araña",
+        "poder": "0",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Al morir buscas un \"Araña de Axxia\" en tu mazo y lo colocas en el campo",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 024",
+        "nombre": "Mosquito Rojo",
+        "familia": "Insectoide",
+        "tipo": "Mosquito",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Vuela.",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 025",
+        "nombre": "Escarabajo de Hierro",
+        "familia": "Insectoide",
+        "tipo": "Escarabajo",
+        "poder": "1",
+        "resistencia": "4",
+        "nivel": "2",
+        "habilidad": "Proteccion",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 026",
+        "nombre": "Saltamontes de Acero",
+        "familia": "Insectoide",
+        "tipo": "Saltamontes",
+        "poder": "2",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Alcance",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 027",
+        "nombre": "Hormiga Gigante",
+        "familia": "Insectoide",
+        "tipo": "Hormiga",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 028",
+        "nombre": "Hormiga Soldado",
+        "familia": "Insectoide",
+        "tipo": "Hormiga",
+        "poder": "3",
+        "resistencia": "1",
+        "nivel": "2",
+        "habilidad": "Defensor",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 029",
+        "nombre": "Hormiga Reina",
+        "familia": "Insectoide",
+        "tipo": "Hormiga",
+        "poder": "1",
+        "resistencia": "4",
+        "nivel": "3",
+        "habilidad": "Otorga +2 de poder y resistencia a las otras hormigas",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 030",
+        "nombre": "Termita Nuclear",
+        "familia": "Insectoide",
+        "tipo": "Termita",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Explosivo",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 031",
+        "nombre": "Gargola del Paramo",
+        "familia": "Monstruos",
+        "tipo": "Quimera",
+        "poder": "1",
+        "resistencia": "3",
+        "nivel": "2",
+        "habilidad": "Vuela",
+        "estado": "REVISION",
+        "lore": "La Gárgola del Páramo no es simplemente una criatura que parece piedra, es una víctima (o un resultado) de una \"Lluvia de Petrificación\" o \"Plaga de Sílice\" que ocurrió durante el Apocalipsis.\nNo es piedra, es un ciclo: No están petrificadas para siempre. Son criaturas que se petrifican cuando la atmósfera del páramo se vuelve \"tóxica por sílice\" o cuando hay una tormenta de arena silícea. Pasan largos periodos en estado de piedra, y solo se activan cuando la atmósfera \"se limpia\" o cuando un depredador (u humano) se acerca demasiado a sus perchas, rompiendo la tensión superficial del aire petrificante."
+      },
+      {
+        "codigo": "AA - 032",
+        "nombre": "Cangrejo Mutado",
+        "familia": "Monstruos",
+        "tipo": "Bestia",
+        "poder": "1",
+        "resistencia": "3",
+        "nivel": "2",
+        "habilidad": "Camina",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 033",
+        "nombre": "Gigante de Barro",
+        "familia": "Monstruos",
+        "tipo": "Titan",
+        "poder": "4",
+        "resistencia": "6",
+        "nivel": "3",
+        "habilidad": "Lento",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 034",
+        "nombre": "Sombra Errante",
+        "familia": "Monstruos",
+        "tipo": "Sombra",
+        "poder": "4",
+        "resistencia": "1",
+        "nivel": "2",
+        "habilidad": "Etereo",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 035",
+        "nombre": "Espectro",
+        "familia": "Monstruos",
+        "tipo": "Sombra",
+        "poder": "3",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Traidor",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 036",
+        "nombre": "Bestia de Residuos",
+        "familia": "Monstruos",
+        "tipo": "Bestia",
+        "poder": "1",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Toxico",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 037",
+        "nombre": "Mutante de Hierro",
+        "familia": "Monstruos",
+        "tipo": "Titan",
+        "poder": "1",
+        "resistencia": "4",
+        "nivel": "2",
+        "habilidad": "Recolector.",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 038",
+        "nombre": "Tirano de las Profundidades",
+        "familia": "Monstruos",
+        "tipo": "Titan",
+        "poder": "4",
+        "resistencia": "1",
+        "nivel": "2",
+        "habilidad": "",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 039",
+        "nombre": "Coloso de Fuego",
+        "familia": "Monstruos",
+        "tipo": "Titan",
+        "poder": "2",
+        "resistencia": "2",
+        "nivel": "2",
+        "habilidad": "Ardiente",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 040",
+        "nombre": "Quimera de Ruinas",
+        "familia": "Monstruos",
+        "tipo": "Quimera",
+        "poder": "4",
+        "resistencia": "2",
+        "nivel": "3",
+        "habilidad": "Vuela",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 041",
+        "nombre": "Pez escurridizo",
+        "familia": "Acuáticos",
+        "tipo": "Pez",
+        "poder": "1",
+        "resistencia": "2",
+        "nivel": "1",
+        "habilidad": "Bucear",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 042",
+        "nombre": "Anguila relámpago",
+        "familia": "Acuáticos",
+        "tipo": "Pez",
+        "poder": "2",
+        "resistencia": "1",
+        "nivel": "1",
+        "habilidad": "Bucear. Pesado",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 043",
+        "nombre": "Ajolote de aguas negras",
+        "familia": "Acuáticos",
+        "tipo": "Anfibio",
+        "poder": "2",
+        "resistencia": "4",
+        "nivel": "2",
+        "habilidad": "Bucear. Defensor",
+        "estado": "REVISION",
+        "lore": ""
+      },
+      {
+        "codigo": "AA - 044",
+        "nombre": "Depredador abisal",
+        "familia": "Acuáticos",
+        "tipo": "Pez",
+        "poder": "5",
+        "resistencia": "3",
+        "nivel": "3",
+        "habilidad": "Bucear. Lento",
+        "estado": "REVISION",
+        "lore": ""
+      }
+    ];
+
     async function loadBestiario() {
-      // Nota: para que fetch funcione desde filesystem sin servidor,
-      // lo ideal es correr con un server local. Si no, igual cargará si
-      // abrís con un servidor.
-      const res = await fetch('../Context/Ekko - Base de datos - Bestiario.csv');
-      const text = await res.text();
+      try {
+        const res = await fetch('../Context/Ekko - Base de datos - Bestiario.csv');
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const text = await res.text();
 
-      const rows = parseSemicolonCSV(text.replace(/^\uFEFF/, ''));
-      const header = rows[0].map(normalizeHeader);
-      const body = rows.slice(1);
+        const rows = parseSemicolonCSV(text.replace(/^\uFEFF/, ''));
+        const header = rows[0].map(normalizeHeader);
+        const body = rows.slice(1);
 
-      const idx = (name) => header.findIndex(h => h.toLowerCase() === name.toLowerCase());
+        const idx = (name) => header.findIndex(h => h.toLowerCase() === name.toLowerCase());
 
-      const iCodigo = idx('Codigo');
-      const iNombre = idx('Nombre');
-      const iFamilia = idx('Familia');
-      const iPoder = idx('Poder');
-      const iRes = idx('Resistencia');
-      const iNivel = idx('Nivel');
-      const iHab = idx('Habilidad');
-      const iEstado = idx('ESTADO');
-      const iLore = idx('Lore');
+        const iCodigo = idx('Codigo');
+        const iNombre = idx('Nombre');
+        const iFamilia = idx('Familia');
+        const iPoder = idx('Poder');
+        const iRes = idx('Resistencia');
+        const iNivel = idx('Nivel');
+        const iHab = idx('Habilidad');
+        const iEstado = idx('ESTADO');
+        const iLore = idx('Lore');
 
-      return body.map(cols => {
-        const get = (i) => (i >= 0 ? (cols[i] ?? '') : '');
-        return {
-          codigo: get(iCodigo),
-          nombre: get(iNombre),
-          familia: get(iFamilia),
-          poder: get(iPoder),
-          resistencia: get(iRes),
-          nivel: get(iNivel),
-          habilidad: get(iHab),
-          estado: get(iEstado),
-          lore: get(iLore),
-          tipo: get(idx('Tipo')),
-        };
-      }).filter(c => c.codigo && c.nombre);
+        return body.map(cols => {
+          const get = (i) => (i >= 0 ? (cols[i] ?? '') : '');
+          return {
+            codigo: get(iCodigo),
+            nombre: get(iNombre),
+            familia: get(iFamilia),
+            poder: get(iPoder),
+            resistencia: get(iRes),
+            nivel: get(iNivel),
+            habilidad: get(iHab),
+            estado: get(iEstado),
+            lore: get(iLore),
+            tipo: get(idx('Tipo')),
+          };
+        }).filter(c => c.codigo && c.nombre);
+      } catch (err) {
+        console.warn('No se pudo cargar el CSV del bestiario dinámicamente (por ejemplo, por restricciones de CORS de tu navegador al abrir el archivo localmente con double click). Cargando los datos de respaldo locales...', err);
+        return FALLBACK_BESTIARIO;
+      }
     }
 
     function render(list) {
