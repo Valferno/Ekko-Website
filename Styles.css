@@ -365,6 +365,97 @@ main {
 }
 
 
+/* -------------------------
+   Arte geométrico provisional (TCG-art)
+   ------------------------- */
+
+.tcg-art {
+  border: 2.5px solid #000;
+  border-radius: 10px;
+  height: 78px;
+  margin: 6px 0;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.tcg-art--death { background: linear-gradient(135deg, #111 20%, #4a148c 80%); }
+.tcg-art--phoenix { background: linear-gradient(135deg, #e65100 20%, #ffb300 80%); }
+.tcg-art--owl { background: linear-gradient(135deg, #0d47a1 20%, #00acc1 80%); }
+.tcg-art--nature { background: linear-gradient(135deg, #1b5e20 20%, #76ff03 80%); }
+.tcg-art--steel { background: linear-gradient(135deg, #424242 20%, #bdbdbd 80%); }
+.tcg-art--abyssal { background: linear-gradient(135deg, #0d47a1 20%, #00e676 80%); }
+.tcg-art--cosmic { background: linear-gradient(135deg, #4a148c 20%, #ff00ff 80%); }
+
+/* CSS Geometric Creatures */
+.art-glyph {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 3.5px solid #fff;
+  box-shadow: 0 0 15px rgba(255,255,255,0.4);
+}
+
+.art-glyph--death { border-radius: 50%; background: #000; transform: translate(-50%, -50%) rotate(45deg); border-left-color: #00e5ff; }
+
+.art-glyph--phoenix { width: 0; height: 0; border-left: 25px solid transparent; border-right: 25px solid transparent; border-bottom: 43px solid #ff3d00; background: transparent; box-shadow: none; }
+
+.art-glyph--owl { border-radius: 8px; background: #fff; transform: translate(-50%, -50%) rotate(22deg); }
+
+.art-glyph--circle { border-radius: 50%; background: rgba(255,255,255,0.08); }
+
+.art-glyph--triangle {
+  width: 0;
+  height: 0;
+  border-left: 26px solid transparent;
+  border-right: 26px solid transparent;
+  border-bottom: 45px solid #00e5ff;
+  background: transparent;
+  box-shadow: 0 0 18px rgba(0,229,255,0.35);
+  border-top: 0;
+}
+
+.art-glyph--square { border-radius: 10px; background: rgba(255,255,255,0.08); transform: translate(-50%, -50%) rotate(22deg); }
+
+.art-glyph--diamond {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.08);
+  border: 3.5px solid #fff;
+  transform: translate(-50%, -50%) rotate(45deg);
+  box-shadow: 0 0 16px rgba(255,255,255,0.35);
+}
+
+.art-glyph--hexagon {
+  width: 50px;
+  height: 50px;
+  background: rgba(255,255,255,0.08);
+  border: 3.5px solid #fff;
+  clip-path: polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%);
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.art-glyph--ring {
+  border-radius: 50%;
+  border: 3.5px solid #fff;
+  box-shadow: 0 0 22px rgba(0,229,255,0.35);
+}
+
+.art-glyph--star {
+  width: 0;
+  height: 0;
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-bottom: 44px solid #ffab40;
+  background: transparent;
+  box-shadow: 0 0 18px rgba(255,171,64,0.4);
+  transform: translate(-50%, -50%) rotate(15deg);
+  border-top: 0;
+}
+
 /* Tokens (team) */
 .team {
   padding: 12px 0;

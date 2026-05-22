@@ -45,6 +45,11 @@
           <span class="status status--muted" data-status-text>REVISION</span>
         </div>
         <h2 class="mechanic-name"></h2>
+
+        <div class="tcg-art" data-art-container>
+          <div class="art-glyph" data-art-glyph></div>
+        </div>
+
         <p class="mechanic-detail"></p>
 
         <details class="mechanic-details">
@@ -67,6 +72,37 @@
 
     function statusClass(s) {
       return s === 'OK' ? 'status--ok' : 'status--review';
+    }
+
+    function getEventArt(e) {
+      const name = (e.name || '').toLowerCase();
+      const detail = (e.detail || '').toLowerCase();
+      const text = `${name} ${detail}`;
+
+      const hasAny = (arr) => arr.some(w => text.includes(w));
+
+      // Días de la semana => chronos + star (fallback a muerte/círculo por clases actuales)
+      if (hasAny(['lunes', 'martes', 'miercoles', 'miércoles', 'jueves', 'viernes', 'sabado', 'sábado', 'domingo'])) {
+        return { art: 'tcg-art--death', glyph: 'art-glyph--circle' };
+      }
+
+      // Combate / sacrificar / fusión / mutación => phoenix/death + triangle (fallback círculo/triángulo no existe => diamond)
+      if (hasAny(['sacrificio', 'ataque', 'kamikaze', 'fusión', 'fusion', 'mutación', 'mutacion'])) {
+        return { art: 'tcg-art--phoenix', glyph: 'art-glyph--diamond' };
+      }
+
+      // Apoyo => owl/steel
+      if (hasAny(['entrenamiento', 'refuerzos', 'retiro'])) {
+        return { art: 'tcg-art--owl', glyph: 'art-glyph--owl' };
+      }
+
+      // Elementales/lluvia/tormenta => abyssal/ ring
+      if (hasAny(['lluvia', 'tormenta', 'helada'])) {
+        return { art: 'tcg-art--abyssal', glyph: 'art-glyph--ring' };
+      }
+
+      // Default
+      return { art: 'tcg-art--cosmic', glyph: 'art-glyph--circle' };
     }
 
     function parseSemicolonCSV(text) {
@@ -326,6 +362,33 @@
         statusBadge.textContent = e.status;
         statusBadge.classList.remove('status--ok', 'status--review', 'status--muted');
         statusBadge.classList.add(statusClass(e.status));
+
+        const art = getEventArt(e);
+        const artContainer = node.querySelector('[data-art-container]');
+        const glyphEl = node.querySelector('[data-art-glyph]');
+        if (artContainer && glyphEl) {
+          artContainer.classList.remove(
+            'tcg-art--death',
+            'tcg-art--phoenix',
+            'tcg-art--owl',
+            'tcg-art--nature',
+            'tcg-art--steel',
+            'tcg-art--abyssal',
+            'tcg-art--cosmic'
+          );
+          artContainer.classList.add(art.art);
+
+          glyphEl.classList.remove(
+            'art-glyph--death',
+            'art-glyph--phoenix',
+            'art-glyph--owl',
+            'art-glyph--circle',
+            'art-glyph--diamond',
+            'art-glyph--hexagon',
+            'art-glyph--ring'
+          );
+          glyphEl.classList.add(art.glyph);
+        }
 
         grid.appendChild(node);
       });
