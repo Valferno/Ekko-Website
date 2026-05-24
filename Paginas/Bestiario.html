@@ -25,10 +25,13 @@
   <main>
     <h1>Bestiario</h1>
 
-    <p class="subtitle">Criaturas listadas desde la base de datos. Podés filtrar por estado y buscar por nombre.</p>
+    <p class="subtitle">Criaturas listadas desde la base de datos. Filtrá por tipo, estado o buscá por nombre.</p>
 
     <section class="mechanics-toolbar">
       <input id="bestSearch" class="input" type="search" placeholder="Buscar criatura..." aria-label="Buscar criatura" />
+      <select id="bestTipo" class="select" aria-label="Filtrar por tipo">
+        <option value="ALL" selected>Todos los tipos</option>
+      </select>
       <select id="bestStatus" class="select" aria-label="Filtrar por estado">
         <option value="ALL" selected>Todos los estados</option>
         <option value="OK">OK</option>
@@ -36,7 +39,13 @@
       </select>
     </section>
 
-    <section id="bestGrid" class="mechanics-grid" aria-live="polite"></section>
+    <section class="showcase-section" aria-labelledby="bestiario-showcase-header">
+      <h2 class="showcase-title" id="bestiario-showcase-header">Criaturas Destacadas</h2>
+      <p class="showcase-subtitle">Explora los seres biomecánicos y mutaciones bioluminiscentes que pueblan el páramo del vacío.</p>
+
+      <div class="cards-flex" id="bestGrid" aria-live="polite"></div>
+    </section>
+
 
     <template id="bestCardTpl">
       <article class="mechanic-card" data-status="">
@@ -51,19 +60,7 @@
           <div class="art-glyph" data-art-glyph></div>
         </div>
 
-        <div class="mechanic-summary" data-summary></div>
-
-        <div class="mechanic-flip" aria-label="Carta volteable">
-          <div class="mechanic-flip__front">
-            <button class="flip-front-btn" type="button">Ver lore</button>
-          </div>
-          <div class="mechanic-flip__back">
-            <div class="mechanic-lore-toolbar">
-              <button class="flip-back-btn" type="button">Cerrar</button>
-            </div>
-            <div class="mechanic-extra" style="display:none;"></div>
-          </div>
-        </div>
+        <p class="mechanic-detail" data-summary></p>
       </article>
     </template>
 
@@ -74,6 +71,7 @@
     const grid = document.getElementById('bestGrid');
     const tpl = document.getElementById('bestCardTpl');
     const searchEl = document.getElementById('bestSearch');
+    const tipoEl = document.getElementById('bestTipo');
     const statusEl = document.getElementById('bestStatus');
     const emptyEl = document.getElementById('bestEmpty');
 
@@ -760,98 +758,20 @@
 
         node.querySelector('.mechanic-id').textContent = c.codigo || '';
         node.querySelector('.mechanic-name').textContent = c.nombre || '';
-        node.querySelector('[data-summary]').textContent = `${c.familia || ''}${c.familia ? ' · ' : ''}${c.tipo || ''} · Poder: ${c.poder || '-'} · Resistencia: ${c.resistencia || '-'} · Nivel: ${c.nivel || '-'}`;
+        node.querySelector('[data-summary]').textContent = `${c.familia || ''}${c.familia ? ' · ' : ''}${c.tipo || ''} · ⚔ ${c.poder || '-'} · 🛡 ${c.resistencia || '-'} · Nv.${c.nivel || '-'}`;
 
         const badge = node.querySelector('[data-status-text]');
         badge.textContent = c.estado || 'REVISION';
         badge.classList.remove('status--ok', 'status--review', 'status--muted');
         badge.classList.add(statusClass(c.estado || 'REVISION'));
 
-        const loreEl = node.querySelector('[data-lore]');
-        if (loreEl) loreEl.textContent = c.lore ? c.lore : 'Sin lore disponible.';
-
-
         const art = getCreatureArt(c);
         const artContainer = node.querySelector('[data-art-container]');
         const glyphEl = node.querySelector('[data-art-glyph]');
         if (artContainer && glyphEl) {
-          artContainer.classList.remove(
-            'tcg-art--death',
-            'tcg-art--phoenix',
-            'tcg-art--owl',
-            'tcg-art--nature',
-            'tcg-art--steel',
-            'tcg-art--abyssal',
-            'tcg-art--cosmic'
-          );
           artContainer.classList.add(art.art);
-
-          glyphEl.classList.remove(
-            'art-glyph--death',
-            'art-glyph--phoenix',
-            'art-glyph--owl',
-            'art-glyph--circle',
-            'art-glyph--diamond',
-            'art-glyph--hexagon',
-            'art-glyph--ring'
-          );
           glyphEl.classList.add(art.glyph);
         }
-
-
-        // Flip behavior
-        const flip = node.querySelector('.mechanic-flip');
-        const frontBtn = node.querySelector('.flip-front-btn');
-        const backBtn = node.querySelector('.flip-back-btn');
-
-        const upBtn = node.querySelector('[data-lore-up]');
-        const downBtn = node.querySelector('[data-lore-down]');
-        const loreWindow = node.querySelector('[data-lore-window]');
-        const loreEl2 = node.querySelector('[data-lore]');
-        if (loreEl2) loreEl2.textContent = '';
-
-        frontBtn.addEventListener('click', () => {
-          flip.classList.add('is-lore');
-          // Reset y enfocar ventana de scroll si existe
-          if (loreWindow) loreWindow.scrollTop = 0;
-          if (loreEl2) loreEl2.scrollTop = 0;
-        });
-        backBtn.addEventListener('click', () => {
-          flip.classList.remove('is-lore');
-        });
-
-
-
-        const scrollStep = 140;
-
-        // Scroll dentro de la ventana del lore
-        if (loreWindow) {
-          loreWindow.addEventListener('wheel', (ev) => {
-            ev.stopPropagation();
-          }, { passive: true });
-
-          loreWindow.addEventListener('touchmove', (ev) => {
-            ev.stopPropagation();
-          }, { passive: true });
-        }
-
-        if (upBtn && loreWindow) {
-          upBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            loreWindow.scrollTop -= scrollStep;
-          });
-        }
-        if (downBtn && loreWindow) {
-          downBtn.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            loreWindow.scrollTop += scrollStep;
-          });
-        }
-
-
-        // Evita que el clic en lore-nav cierre el flip/ afecte layout
-        // (No hacemos nada más aquí; los handlers arriba ya hacen stopPropagation).
-
 
         grid.appendChild(node);
       });
@@ -862,20 +782,32 @@
     async function init() {
       all = await loadBestiario();
 
+      // Poblar el select de tipos dinámicamente con los tipos únicos del bestiario
+      const tipos = [...new Set(all.map(c => (c.tipo || '').trim()).filter(Boolean))].sort();
+      tipos.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        tipoEl.appendChild(opt);
+      });
+
       function applyFilters() {
         const q = (searchEl.value || '').trim().toLowerCase();
+        const tp = tipoEl.value;
         const st = statusEl.value;
 
         const filtered = all.filter(c => {
-          const matchQ = !q || [c.codigo, c.nombre, c.familia, c.tipo, c.habilidad, c.lore].join(' ').toLowerCase().includes(q);
+          const matchQ = !q || [c.codigo, c.nombre, c.familia, c.tipo, c.habilidad].join(' ').toLowerCase().includes(q);
+          const matchT = tp === 'ALL' || (c.tipo || '').trim() === tp;
           const matchS = st === 'ALL' || (c.estado || 'REVISION') === st;
-          return matchQ && matchS;
+          return matchQ && matchT && matchS;
         });
 
         render(filtered);
       }
 
       searchEl.addEventListener('input', applyFilters);
+      tipoEl.addEventListener('change', applyFilters);
       statusEl.addEventListener('change', applyFilters);
       applyFilters();
     }
