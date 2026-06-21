@@ -15,7 +15,7 @@
       <a href="./Mecanicas.html">Mecanicas</a>
       <a href="./Bestiario.html">Bestiario</a>
       <a href="./Eventos.html">Eventos</a>
-      <a href="./Changelog.html">Changelog</a>
+
       <a href="./Roadmap.html">Roadmap</a>
       <a href="./Contacto.html">Contacto</a>
       <a href="./Legales.html">Legales</a>
@@ -24,108 +24,237 @@
 
   <main>
     <h1>Changelog</h1>
+    <p class="subtitle">Resumen del cambio de reglamento por sección (con badges y buscador).</p>
 
-    <section class="changelog-sections">
-      <article class="changelog-section" id="changelog-reglamento">
-        <h2>Reglamento</h2>
-        <div class="changelog-divider"></div>
-        <ul class="changelog-list" aria-label="Changelog Reglamento"></ul>
-      </article>
+    <section class="changelog-layout">
+      <aside class="changelog-sidebar" aria-label="Filtros de changelog">
+        <div class="changelog-kpi">
+          <div class="changelog-kpi__item">
+            <div class="changelog-kpi__value" id="kpi-total">0</div>
+            <div class="changelog-kpi__label">cambios</div>
+          </div>
+          <div class="changelog-kpi__item">
+            <div class="changelog-kpi__value" id="kpi-sections">0</div>
+            <div class="changelog-kpi__label">secciones</div>
+          </div>
+          <div class="changelog-kpi__item">
+            <div class="changelog-kpi__value" id="kpi-nuevos">0</div>
+            <div class="changelog-kpi__label">NUEVO</div>
+          </div>
+        </div>
 
-      <article class="changelog-section" id="changelog-bestiario">
-        <h2>Bestiario</h2>
-        <div class="changelog-divider"></div>
-        <ul class="changelog-list" aria-label="Changelog Bestiario"></ul>
-      </article>
+        <div class="changelog-filters">
+          <label class="changelog-filter">
+            <span class="changelog-filter__label">Buscar</span>
+            <input id="changelogSearch" class="input" type="search" placeholder="ej: Ekko, combate, eventos" aria-label="Buscar en changelog" />
+          </label>
 
-      <article class="changelog-section" id="changelog-mecanicas">
-        <h2>Mecánicas</h2>
-        <div class="changelog-divider"></div>
-        <ul class="changelog-list" aria-label="Changelog Mecánicas"></ul>
-      </article>
+          <label class="changelog-filter">
+            <span class="changelog-filter__label">Tipo</span>
+            <select id="changelogType" class="select" aria-label="Filtrar por tipo">
+              <option value="ALL" selected>Todos</option>
+              <option value="NUEVO">NUEVO</option>
+              <option value="MODIFICADO">MODIFICADO</option>
+            </select>
+          </label>
+        </div>
 
-      <article class="changelog-section" id="changelog-eventos">
-        <h2>Eventos</h2>
-        <div class="changelog-divider"></div>
-        <ul class="changelog-list" aria-label="Changelog Eventos"></ul>
-      </article>
+        <div class="changelog-note">
+          Consejo: usá el buscador para encontrar cambios rápido.
+        </div>
+      </aside>
 
-      <article class="changelog-section" id="changelog-apk">
-        <h2>APK</h2>
-        <div class="changelog-divider"></div>
-        <ul class="changelog-list" aria-label="Changelog APK"></ul>
-      </article>
-
-      <article class="changelog-section" id="changelog-web">
-        <h2>Web</h2>
-        <div class="changelog-divider"></div>
-        <ul class="changelog-list" aria-label="Changelog Web"></ul>
-      </article>
+      <section class="changelog-sections" id="changelogSections">
+        <article class="changelog-section" id="changelog-reglamento">
+          <h2>Reglamento</h2>
+          <div class="changelog-divider"></div>
+          <div class="changelog-cards" id="changelogCards" aria-label="Changelog Reglamento"></div>
+        </article>
+      </section>
     </section>
-
-    <p class="contact-hint" style="margin-top: 14px;">
-      Usá estas secciones para registrar cambios por módulo.
-    </p>
   </main>
-
-  <script>
-    // Cargamos el changelog desde Context/Changelog.md y lo mostramos en la sección de "Reglamento".
-    async function loadReglamentoChangelog() {
-      const list = document.querySelector('#changelog-reglamento ul.changelog-list');
-      if (!list) return;
-
-      try {
-        const res = await fetch('../Context/Changelog.md');
-        const md = await res.text();
-
-        // Heurística simple: convertimos encabezados (###) y bullets (*) a elementos.
-        const lines = md.split(/\r?\n/);
-        const items = [];
-
-        for (const line of lines) {
-          const l = (line || '').trim();
-          if (!l) continue;
-
-          // bullets
-          if (/^\*\s+/.test(l)) {
-            items.push(l.replace(/^\*\s+/, ''));
-            continue;
-          }
-
-          // sub-secciones (###)
-          const m = l.match(/^###\s+(.*)$/);
-          if (m) {
-            items.push(m[1]);
-            continue;
-          }
-        }
-
-        if (!items.length) {
-          const li = document.createElement('li');
-          li.textContent = 'Changelog vacío o no parseable.';
-          list.appendChild(li);
-          return;
-        }
-
-        for (const it of items) {
-          const li = document.createElement('li');
-          li.textContent = it;
-          list.appendChild(li);
-        }
-      } catch (err) {
-        console.error(err);
-        const li = document.createElement('li');
-        li.textContent = 'Error cargando Changelog.md (ver consola).';
-        list.appendChild(li);
-      }
-    }
-
-    loadReglamentoChangelog();
-  </script>
 
   <footer>
     <h5 class="footer-text">Todos los derechos al lado del izquierdo 2026</h5>
   </footer>
+
+  <script>
+    function escapeHtml(str) {
+      return (str || '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;',
+        '<': '<',
+        '>': '>',
+        '"': '"',
+        "'": '&#039;'
+      }[c]));
+    }
+
+    // Convierte el md al formato actual, agrupando cada bloque de ### como un cambio.
+    function parseChangelog(md) {
+      const lines = md.split(/\r?\n/);
+      let currentTop = '';
+      let currentType = '';
+      let currentTitle = '';
+      let currentBody = [];
+      const out = [];
+
+      const flush = () => {
+        const title = (currentTitle || '').trim();
+        const body = currentBody.map(x => (x || '').trim()).filter(Boolean);
+        if (!title && !body.length) return;
+
+        let type = currentType || 'MODIFICADO';
+        const t = (title + ' ' + body.join(' ')).toUpperCase();
+        if (t.includes('[NUEVO]')) type = 'NUEVO';
+        if (t.includes('[MODIFICADO]')) type = 'MODIFICADO';
+
+        out.push({
+          section: currentTop || 'Reglamento',
+          type,
+          title: title || 'Cambio',
+          body
+        });
+      };
+
+      for (const rawLine of lines) {
+        const line = (rawLine || '').trim();
+        if (!line) continue;
+
+        const h2 = line.match(/^##\s+(.*)$/);
+        if (h2) {
+          currentTop = h2[1];
+          continue;
+        }
+
+        const h3 = line.match(/^###\s+(.*)$/);
+        if (h3) {
+          flush();
+          currentTitle = h3[1];
+          currentType = '';
+          currentBody = [];
+          continue;
+        }
+
+        if (/^\*\s+/.test(line)) {
+          currentBody.push(line.replace(/^\*\s+/, ''));
+          continue;
+        }
+
+        // Algunas líneas pueden venir con viñetas dobles o texto sin '*'.
+        // Las agregamos si ya estamos dentro de un ###.
+        if (currentTitle) currentBody.push(line);
+      }
+
+      flush();
+      return out;
+    }
+
+    function applyFilters(all, { q, type }) {
+      const query = (q || '').trim().toLowerCase();
+      const typeNorm = type || 'ALL';
+      return all.filter(item => {
+        const blob = [item.section, item.type, item.title, ...(item.body || [])]
+          .join(' ')
+          .toLowerCase();
+        const matchQ = !query || blob.includes(query);
+        const matchT = typeNorm === 'ALL' || item.type === typeNorm;
+        return matchQ && matchT;
+      });
+    }
+
+    function renderChangeCard(container, it) {
+      const badgeClass = it.type === 'NUEVO' ? 'changelog-badge--new' : 'changelog-badge--mod';
+      const bodyHtml = (it.body || []).slice(0, 8)
+        .map(x => `<li>${escapeHtml(x)}</li>`)
+        .join('');
+
+      const hasBody = (it.body || []).length > 0;
+
+      const card = document.createElement('article');
+      card.className = 'changelog-change';
+      card.innerHTML = `
+        <div class="changelog-change__top">
+          <span class="${badgeClass} changelog-badge">${escapeHtml(it.type)}</span>
+          <h3 class="changelog-change__title">${escapeHtml(it.title)}</h3>
+        </div>
+        ${hasBody ? `<ul class="changelog-change__body">${bodyHtml}</ul>` : ''}
+      `;
+
+      container.appendChild(card);
+    }
+
+    async function loadMdText() {
+      // Al abrir HTML localmente, fetch() puede estar bloqueado por CORS.
+      // Si falla, mostramos un mensaje claro.
+      const res = await fetch('../Context/Changelog.md');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.text();
+    }
+
+    async function loadChangelog() {
+      const container = document.getElementById('changelogCards');
+      const searchEl = document.getElementById('changelogSearch');
+      const typeEl = document.getElementById('changelogType');
+
+      const kpiTotal = document.getElementById('kpi-total');
+      const kpiSections = document.getElementById('kpi-sections');
+      const kpiNuevos = document.getElementById('kpi-nuevos');
+
+      if (!container) return;
+
+      try {
+        const md = await loadMdText();
+        const items = parseChangelog(md);
+
+        if (kpiTotal) kpiTotal.textContent = String(items.length);
+        if (kpiNuevos) kpiNuevos.textContent = String(items.filter(x => x.type === 'NUEVO').length);
+        if (kpiSections) kpiSections.textContent = String(new Set(items.map(x => x.section)).size);
+
+        const render = () => {
+          const filtered = applyFilters(items, {
+            q: searchEl?.value || '',
+            type: typeEl?.value || 'ALL'
+          });
+
+          container.innerHTML = '';
+
+          if (!filtered.length) {
+            const empty = document.createElement('div');
+            empty.className = 'empty-state';
+            empty.style.margin = '0';
+            empty.textContent = 'No hay cambios con esos filtros.';
+            container.appendChild(empty);
+            return;
+          }
+
+          // NUEVO primero
+          filtered.sort((a, b) => {
+            const pa = a.type === 'NUEVO' ? 0 : 1;
+            const pb = b.type === 'NUEVO' ? 0 : 1;
+            if (pa !== pb) return pa - pb;
+            return (a.title || '').localeCompare(b.title || '');
+          });
+
+          for (const it of filtered) renderChangeCard(container, it);
+        };
+
+        render();
+        if (searchEl) searchEl.addEventListener('input', render);
+        if (typeEl) typeEl.addEventListener('change', render);
+
+      } catch (err) {
+        console.error(err);
+        container.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'empty-state';
+        p.style.margin = '0';
+        p.textContent = 'Error cargando Changelog.md. Probá abrir el archivo con un servidor local (o revisá CORS en consola).';
+        container.appendChild(p);
+      }
+    }
+
+    loadChangelog();
+  </script>
 </body>
 </html>
 
